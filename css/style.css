@@ -1,0 +1,80 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    background: linear-gradient(to right, #e3e3e3, #f7f7f7);
+    color: #333;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.container {
+    display: flex;
+    flex-direction: column; /* 修改为column以实现垂直排列 */
+    width: 100%;
+    max-width: 90%;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    align-items: center; /* 修改为center以在容器中居中对齐 */
+}
+
+.boxes {
+    display: flex;
+    flex-direction: row; /* 保持框水平排列 */
+    width: 100%;
+}
+
+#json-input, #json-output {
+    margin: 10px; /* 调整外边距 */
+    padding: 15px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    background: #ffffff;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    font-family: 'Courier New', monospace;
+    font-size: 16px;
+    line-height: 1.5;
+    min-height: 250px;
+    overflow: auto;
+    resize: vertical;
+    position: relative;
+    transition: border-color 0.3s ease-in-out;
+    width: calc(50% - 20px); /* 设置宽度为容器宽度的一半减去间隙 */
+}
+
+#json-output {
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+/* 新增按钮样式 */
+button {
+    padding: 8px 16px;
+    margin: 10px 5px; /* 调整按钮的外边距 */
+    border: none;
+    border-radius: 4px;
+    background-color: #009688;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+    outline: none;
+    transition: background-color 0.2s, box-shadow 0.2s;
+}
+
+button:hover {
+    background-color: #00796b;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+button:active {
+    background-color: #005f56;
+}
+
+/* 按钮组容器样式 */
+.buttons-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+    width: 100%; /* 设置宽度以与框宽度相匹配 */
+}

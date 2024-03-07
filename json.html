@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON Data Visualizer</title>
+    <script src="js/script2.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<h1>JSON Data Visualizer</h1>
+<div class="container">
+    <div class="buttons-container">
+        <button id="button1" onclick="unescapeJSON()">去除转义</button>
+        <button id="button2" onclick="escapeJSON()">转义</button>
+        <button id="button3" onclick="compressJSON()">压缩</button>
+    </div>
+    <div class="boxes">
+        <textarea id="json-input" rows="10" cols="50" placeholder="Paste your JSON data here..."></textarea>
+        <pre id="json-output"></pre>
+    </div>
+</div>
+<script src="js/script.js"></script>
+</body>
+</html>
