@@ -1,6 +1,6 @@
 body {
     font-family: 'Roboto', sans-serif;
-    background: linear-gradient(to right, #e3e3e3, #f7f7f7);
+    background: #f7f7f7; /* 护眼背景颜色 */
     color: #333;
     margin: 0;
     padding: 20px;
@@ -11,26 +11,29 @@ body {
 
 .container {
     display: flex;
-    flex-direction: column; /* 修改为column以实现垂直排列 */
+    flex-direction: column;
     width: 100%;
     max-width: 90%;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-    align-items: center; /* 修改为center以在容器中居中对齐 */
+    align-items: center;
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
 }
 
 .boxes {
     display: flex;
-    flex-direction: row; /* 保持框水平排列 */
+    flex-direction: row;
     width: 100%;
 }
 
 #json-input, #json-output {
-    margin: 10px; /* 调整外边距 */
+    margin: 10px;
     padding: 15px;
-    border: 2px solid #ddd;
+    border: 2px solid #ddd; /* 边框颜色调整为淡灰色 */
     border-radius: 8px;
-    background: #ffffff;
+    background: #f9f9f9;
     box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
     font-family: 'Courier New', monospace;
     font-size: 16px;
@@ -40,21 +43,21 @@ body {
     resize: vertical;
     position: relative;
     transition: border-color 0.3s ease-in-out;
-    width: calc(50% - 20px); /* 设置宽度为容器宽度的一半减去间隙 */
+    width: calc(50% - 20px);
 }
 
 #json-output {
     overflow-x: auto;
     overflow-y: hidden;
+    white-space: pre;
 }
 
-/* 新增按钮样式 */
 button {
     padding: 8px 16px;
-    margin: 10px 5px; /* 调整按钮的外边距 */
+    margin: 10px 5px;
     border: none;
     border-radius: 4px;
-    background-color: #009688;
+    background-color: #4CAF50; /* 按钮颜色保持原绿色 */
     color: white;
     font-size: 14px;
     cursor: pointer;
@@ -63,18 +66,17 @@ button {
 }
 
 button:hover {
-    background-color: #00796b;
+    background-color: #388E3C;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 button:active {
-    background-color: #005f56;
+    background-color: #2E7D32;
 }
 
-/* 按钮组容器样式 */
 .buttons-container {
     display: flex;
     justify-content: center;
     margin-bottom: 20px;
-    width: 100%; /* 设置宽度以与框宽度相匹配 */
+    width: 100%;
 }
