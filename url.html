@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL 编解码工具</title>
+    <link href="css/style.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+    <div class="buttons-container">
+        <button onclick="window.location.href='index.html'">首页</button>
+        <button onclick="window.location.href='json.html'">JSON格式化</button>
+        <button onclick="window.location.href='url.html'">URL编解码</button>
+        <button onclick="window.location.href='time.html'">时间戳格式化</button>
+    </div>
+    <div class="boxes">
+        <div class="input-group">
+            <textarea id="url-input" placeholder="在这里输入需要编码或解码的URL..."></textarea>
+            <div class="button-group">
+                <button onclick="encodeURL()">编码</button>
+                <button onclick="decodeURL()">解码</button>
+            </div>
+        </div>
+        <pre id="url-output"></pre>
+    </div>
+</div>
+<script src="js/url-script.js"></script>
+</body>
+</html>
