@@ -348,17 +348,28 @@ button:active {
 /* 时间戳格式化页面样式 */
 #time-input {
     flex: 1;
-    min-height: 100px;
-    padding: 16px;
+    min-height: 120px;
+    padding: 20px;
     border: 2px solid #e5e7eb;
-    border-radius: 8px;
+    border-radius: 12px;
     font-family: 'Fira Code', 'Cascadia Code', 'Source Code Pro', Menlo, Monaco, 'Courier New', monospace;
-    font-size: 14px;
-    line-height: 1.5;
+    font-size: 16px;
+    line-height: 1.6;
     resize: none;
     background: #ffffff;
     color: #374151;
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+#time-input::placeholder {
+    color: #9ca3af;
+    opacity: 0.8;
+}
+
+#time-input:hover {
+    border-color: #9ca3af;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
 }
 
 #time-input:focus {
@@ -369,55 +380,75 @@ button:active {
 
 #time-output {
     flex: 1;
-    min-height: 200px;
-    padding: 16px;
+    min-height: 240px;
+    padding: 20px;
     margin: 0;
     background: #ffffff;
     border: 2px solid #e5e7eb;
-    border-radius: 8px;
+    border-radius: 12px;
     font-family: 'Fira Code', 'Cascadia Code', 'Source Code Pro', Menlo, Monaco, 'Courier New', monospace;
-    font-size: 14px;
-    line-height: 1.5;
+    font-size: 15px;
+    line-height: 1.6;
     overflow-x: auto;
     white-space: pre-wrap;
     word-break: break-all;
     box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+    color: #1f2937;
 }
 
 /* 时间戳页面的按钮组样式 */
 .button-group {
     display: flex;
-    gap: 12px;
+    gap: 16px;
     justify-content: center;
     flex-wrap: wrap;
-    margin: 16px 0;
+    margin: 20px 0;
 }
 
 .button-group button {
-    min-width: 140px;
+    min-width: 160px;
+    padding: 12px 24px;
+    font-size: 15px;
     background-color: #4CAF50;
+    border-radius: 10px;
+    transition: all 0.3s ease;
 }
 
 .button-group button:hover {
     background-color: #388E3C;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.button-group button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* 响应式布局调整 */
 @media (max-width: 768px) {
     #time-input {
-        min-height: 80px;
+        min-height: 100px;
+        font-size: 15px;
+        padding: 16px;
     }
     
     #time-output {
-        min-height: 160px;
+        min-height: 200px;
+        font-size: 14px;
+        padding: 16px;
     }
     
     .button-group {
         flex-direction: column;
         align-items: stretch;
+        gap: 12px;
+        margin: 16px 0;
     }
     
     .button-group button {
         width: 100%;
+        min-width: unset;
+        padding: 10px 20px;
     }
 }
