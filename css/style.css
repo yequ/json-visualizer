@@ -595,7 +595,8 @@ button:active {
 }
 
 [data-theme="dark"] .json-formatter-row .json-formatter-key {
-    color: #73daca !important;
+    color: #f7768e !important;
+    opacity: 0.9 !important;
 }
 
 [data-theme="dark"] .json-formatter-row .json-formatter-bracket {
@@ -604,4 +605,20 @@ button:active {
 
 [data-theme="dark"] .json-formatter-row .json-formatter-comma {
     color: #565f89 !important;
+}
+
+[data-theme="dark"] .json-formatter-row a {
+    color: inherit !important;
+}
+
+[data-theme="dark"] .json-formatter-row > a > .json-formatter-preview-text {
+    color: #e5e7eb !important;
+}
+
+[data-theme="dark"] .json-formatter-row .json-formatter-toggler {
+    color: #e5e7eb !important;
+}
+
+[data-theme="dark"] .json-formatter-dark.json-formatter-row .json-formatter-toggler:after {
+    color: #e5e7eb !important;
 }

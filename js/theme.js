@@ -4,11 +4,15 @@ function toggleTheme() {
     const currentTheme = html.getAttribute('data-theme');
     const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
     
-    html.setAttribute('data-theme', newTheme);
-    localStorage.setItem('theme', newTheme);
-    
-    // 更新图标
-    updateThemeIcon(newTheme);
+    setTheme(newTheme);
+}
+
+// 设置主题
+function setTheme(theme) {
+    const html = document.documentElement;
+    html.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+    updateThemeIcon(theme);
 }
 
 // 更新主题图标
@@ -21,11 +25,30 @@ function updateThemeIcon(theme) {
     }
 }
 
+// 获取系统主题偏好
+function getSystemTheme() {
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+}
+
+// 监听系统主题变化
+function watchSystemTheme() {
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    mediaQuery.addEventListener('change', (e) => {
+        // 只有当用户没有手动设置主题时，才跟随系统主题
+        if (!localStorage.getItem('theme')) {
+            setTheme(e.matches ? 'dark' : 'light');
+        }
+    });
+}
+
 // 初始化主题
 function initTheme() {
-    const savedTheme = localStorage.getItem('theme') || 'light';
-    document.documentElement.setAttribute('data-theme', savedTheme);
-    updateThemeIcon(savedTheme);
+    // 优先使用用户设置的主题
+    const savedTheme = localStorage.getItem('theme');
+    // 如果用户没有设置主题，则使用系统主题
+    const theme = savedTheme || getSystemTheme();
+    setTheme(theme);
+    watchSystemTheme();
 }
 
 // 页面加载时初始化主题
