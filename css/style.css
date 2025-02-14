@@ -452,3 +452,89 @@ button:active {
         padding: 10px 20px;
     }
 }
+
+/* 主题切换按钮 */
+.theme-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 10px;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ffffff;
+    border: 2px solid #e5e7eb;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.theme-toggle:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.theme-toggle svg {
+    width: 20px;
+    height: 20px;
+    transition: all 0.3s ease;
+}
+
+/* 暗色模式样式 */
+[data-theme="dark"] {
+    background: #1a1a1a;
+    color: #e5e7eb;
+}
+
+[data-theme="dark"] .container {
+    background: #2d2d2d;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="dark"] button {
+    background-color: #4CAF50;
+    color: #ffffff;
+}
+
+[data-theme="dark"] button:hover {
+    background-color: #388E3C;
+}
+
+[data-theme="dark"] #json-input,
+[data-theme="dark"] #url-input,
+[data-theme="dark"] #time-input {
+    background: #1a1a1a;
+    border-color: #404040;
+    color: #e5e7eb;
+}
+
+[data-theme="dark"] #json-input:focus,
+[data-theme="dark"] #url-input:focus,
+[data-theme="dark"] #time-input:focus {
+    border-color: #6366f1;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+[data-theme="dark"] #json-output,
+[data-theme="dark"] #url-output,
+[data-theme="dark"] #time-output {
+    background: #1a1a1a;
+    border-color: #404040;
+    color: #e5e7eb;
+}
+
+[data-theme="dark"] .theme-toggle {
+    background: #2d2d2d;
+    border-color: #404040;
+}
+
+[data-theme="dark"] .theme-toggle svg {
+    fill: #e5e7eb;
+}
+
+[data-theme="dark"] ::placeholder {
+    color: #6b7280;
+}
