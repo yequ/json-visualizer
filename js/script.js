@@ -7,8 +7,27 @@ class JSONVisualizer {
     }
 
     init() {
-        this.input.addEventListener('input', this.debounce(this.handleInput.bind(this), 300));
-        this.loadSavedData();
+        // 从会话存储中恢复数据
+        const savedData = sessionStorage.getItem('jsonData');
+        if (savedData) {
+            this.input.value = savedData;
+            this.formatJSON(savedData);
+        }
+
+        // 监听输入变化（使用防抖）
+        this.input.addEventListener('input', this.debounce(() => {
+            const jsonStr = this.input.value.trim();
+            // 保存到会话存储
+            sessionStorage.setItem('jsonData', jsonStr);
+            
+            if (jsonStr) {
+                this.formatJSON(jsonStr);
+            } else {
+                this.output.innerHTML = '';
+            }
+        }, 300));
+
+        // 设置拖放功能
         this.setupDragAndDrop();
     }
 
@@ -24,23 +43,42 @@ class JSONVisualizer {
         };
     }
 
-    handleInput() {
-        const input = this.input.value;
-        sessionStorage.setItem('jsonInputData', input);
-        this.formatJSON(input);
+    setupDragAndDrop() {
+        const container = document.querySelector('.container');
+        
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            container.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+            });
+        });
+
+        container.addEventListener('dragenter', () => container.classList.add('drag-over'));
+        container.addEventListener('dragleave', () => container.classList.remove('drag-over'));
+        container.addEventListener('drop', (e) => {
+            container.classList.remove('drag-over');
+            const file = e.dataTransfer.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const content = e.target.result;
+                    this.input.value = content;
+                    sessionStorage.setItem('jsonData', content);
+                    this.formatJSON(content);
+                };
+                reader.readAsText(file);
+            }
+        });
     }
 
-    formatJSON(input) {
+    formatJSON(jsonStr) {
         try {
-            if (!input.trim()) {
-                this.output.innerHTML = '';
-                return;
-            }
-            const json = JSON.parse(input);
+            const json = JSON.parse(jsonStr);
             this.output.innerHTML = this.renderJSON(json);
             this.output.classList.remove('error');
         } catch (e) {
-            this.showError('Invalid JSON: ' + e.message);
+            this.output.innerHTML = `<div class="error">Invalid JSON: ${e.message}</div>`;
+            this.output.classList.add('error');
         }
     }
 
@@ -97,9 +135,10 @@ class JSONVisualizer {
         return div.innerHTML;
     }
 
-    showError(message) {
-        this.output.innerHTML = `<span class="error">${message}</span>`;
-        this.output.classList.add('error');
+    handleInput() {
+        const input = this.input.value;
+        sessionStorage.setItem('jsonInputData', input);
+        this.formatJSON(input);
     }
 
     loadSavedData() {
@@ -140,39 +179,9 @@ class JSONVisualizer {
         }
     }
 
-    setupDragAndDrop() {
-        const dropZone = document.querySelector('.container');
-        
-        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-            dropZone.addEventListener(eventName, (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-            });
-        });
-
-        dropZone.addEventListener('dragover', () => dropZone.classList.add('drag-over'));
-        dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
-        
-        dropZone.addEventListener('drop', (e) => {
-            dropZone.classList.remove('drag-over');
-            const file = e.dataTransfer.files[0];
-            if (file) {
-                this.handleDroppedFile(file);
-            }
-        });
-    }
-
-    handleDroppedFile(file) {
-        if (file.type === 'application/json' || file.name.endsWith('.json')) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                this.input.value = e.target.result;
-                this.handleInput();
-            };
-            reader.readAsText(file);
-        } else {
-            this.showToast('Please drop a JSON file!', true);
-        }
+    showError(message) {
+        this.output.innerHTML = `<span class="error">${message}</span>`;
+        this.output.classList.add('error');
     }
 
     showToast(message, isError = false) {
