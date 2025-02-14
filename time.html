@@ -1,24 +1,34 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JSON Data Visualizer</title>
-<!--    <script src="js/script3.js"></script>-->
-    <link rel="stylesheet" href="css/style2.css">
+    <title>时间戳格式化工具</title>
+    <link href="css/style.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
 </head>
 <body>
-<h1>Timestamp Format</h1>
 <div class="container">
-    <div class="boxes">
-        <textarea id="time-long-input" rows="10" cols="50"></textarea>
-        <pre id="time-long-output" contenteditable="true"></pre>
+    <div class="buttons-container">
+        <button onclick="window.location.href='index.html'">首页</button>
+        <button onclick="window.location.href='index.html'">JSON格式化</button>
+        <button onclick="window.location.href='url.html'">URL编解码</button>
+        <button onclick="window.location.href='time.html'">时间戳格式化</button>
     </div>
-    <button onclick="window.location.href='index.html'">首页</button>
-    <button onclick="window.location.href='index.html'">JSON格式化</button>
-    <button onclick="window.location.href='url.html'">URL编解码</button>
-    <button onclick="window.location.href='time.html'">时间戳格式化</button>
+    <div class="boxes">
+        <div class="input-group">
+            <textarea id="time-input" placeholder="在这里输入时间戳或日期字符串..."></textarea>
+            <div class="button-group">
+                <button onclick="timestampToDate()">时间戳转日期</button>
+                <button onclick="dateToTimestamp()">日期转时间戳</button>
+                <button onclick="getCurrentTimestamp()">获取当前时间戳</button>
+            </div>
+        </div>
+        <pre id="time-output"></pre>
+    </div>
 </div>
-<script src="js/script3.js"></script>
+<script src="js/time-script.js"></script>
 </body>
 </html>

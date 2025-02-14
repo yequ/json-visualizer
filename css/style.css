@@ -344,3 +344,80 @@ button:active {
 .json-formatter-dark.json-formatter-row .json-formatter-toggler.json-formatter-open:after {
     content: "▼" !important;
 }
+
+/* 时间戳格式化页面样式 */
+#time-input {
+    flex: 1;
+    min-height: 100px;
+    padding: 16px;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    font-family: 'Fira Code', 'Cascadia Code', 'Source Code Pro', Menlo, Monaco, 'Courier New', monospace;
+    font-size: 14px;
+    line-height: 1.5;
+    resize: none;
+    background: #ffffff;
+    color: #374151;
+    transition: all 0.2s ease;
+}
+
+#time-input:focus {
+    outline: none;
+    border-color: #6366f1;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+#time-output {
+    flex: 1;
+    min-height: 200px;
+    padding: 16px;
+    margin: 0;
+    background: #ffffff;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    font-family: 'Fira Code', 'Cascadia Code', 'Source Code Pro', Menlo, Monaco, 'Courier New', monospace;
+    font-size: 14px;
+    line-height: 1.5;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-break: break-all;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* 时间戳页面的按钮组样式 */
+.button-group {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 16px 0;
+}
+
+.button-group button {
+    min-width: 140px;
+    background-color: #4CAF50;
+}
+
+.button-group button:hover {
+    background-color: #388E3C;
+}
+
+/* 响应式布局调整 */
+@media (max-width: 768px) {
+    #time-input {
+        min-height: 80px;
+    }
+    
+    #time-output {
+        min-height: 160px;
+    }
+    
+    .button-group {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .button-group button {
+        width: 100%;
+    }
+}
