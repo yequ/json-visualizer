@@ -98,31 +98,17 @@ class JSONVisualizer {
             case 'object':
                 if (Array.isArray(data)) {
                     if (data.length === 0) return '[]';
-                    const items = data.map(item => {
-                        return `${nextIndent}${this.renderJSON(item, level + 1)}`;
-                    });
-                    const arrayLength = `<span class="array-length">(${data.length} items)</span>`;
-                    if (data.length > 1) {
-                        return `<div class="collapsible">${indent}<span class="toggle"><span class="toggle-icon">▼</span><span class="bracket">[</span>${arrayLength}</span><div class="content">\n${items.join(',\n')}\n${indent}</div><span class="bracket">]</span></div>`;
-                    } else {
-                        return `[${arrayLength}\n${items.join(',\n')}\n${indent}]`;
-                    }
+                    const items = data.map(item => 
+                        `${nextIndent}${this.renderJSON(item, level + 1)}`
+                    ).join(',\n');
+                    return `[\n${items}\n${indent}]`;
                 } else {
-                    const keys = Object.keys(data);
-                    if (keys.length === 0) return '{}';
-
-                    const properties = keys.map(key => {
-                        return `${nextIndent}<span class="key">"${this.escapeHtml(key)}"</span>${this.renderJSON(data[key], level + 1)}`;
-                    });
-
-                    const content = properties.join(',\n');
-                    const collapsible = level === 0 || keys.length > 1;
-
-                    if (collapsible) {
-                        return `<div class="collapsible">${indent}<span class="toggle"><span class="toggle-icon">▼</span><span class="bracket">{</span></span><div class="content">\n${content}\n${indent}</div><span class="bracket">}</span></div>`;
-                    } else {
-                        return `{\n${content}\n${indent}}`;
-                    }
+                    const entries = Object.entries(data);
+                    if (entries.length === 0) return '{}';
+                    const items = entries.map(([key, value]) => 
+                        `${nextIndent}<span class="key">"${this.escapeHtml(key)}"</span>: ${this.renderJSON(value, level + 1)}`
+                    ).join(',\n');
+                    return `{\n${items}\n${indent}}`;
                 }
             default:
                 return '';
