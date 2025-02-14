@@ -1,82 +1,279 @@
+/* 全局样式 */
 body {
-    font-family: 'Roboto', sans-serif;
-    background: #f7f7f7; /* 护眼背景颜色 */
-    color: #333;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     margin: 0;
     padding: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    background: #f8f9fa;
+    color: #24292e;
+    line-height: 1.6;
 }
 
 .container {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    max-width: 90%;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-    align-items: center;
-    background: #fff;
+    max-width: 1400px;
+    margin: 0 auto;
     padding: 20px;
-    border-radius: 10px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
 }
 
-.boxes {
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-}
-
-#json-input, #json-output {
-    margin: 10px;
-    padding: 15px;
-    border: 2px solid #ddd; /* 边框颜色调整为淡灰色 */
-    border-radius: 8px;
-    background: #f9f9f9;
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
-    font-family: 'Courier New', monospace;
-    font-size: 16px;
-    line-height: 1.5;
-    min-height: 250px;
-    overflow: auto;
-    resize: vertical;
-    position: relative;
-    transition: border-color 0.3s ease-in-out;
-    width: calc(50% - 20px);
-}
-
-#json-output {
-    overflow-x: auto;
-    overflow-y: hidden;
-    white-space: pre;
-}
-
-button {
-    padding: 8px 16px;
-    margin: 10px 5px;
-    border: none;
-    border-radius: 4px;
-    background-color: #4CAF50; /* 按钮颜色保持原绿色 */
-    color: white;
-    font-size: 14px;
-    cursor: pointer;
-    outline: none;
-    transition: background-color 0.2s, box-shadow 0.2s;
-}
-
-button:hover {
-    background-color: #388E3C;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-button:active {
-    background-color: #2E7D32;
-}
-
+/* 按钮容器样式 */
 .buttons-container {
     display: flex;
     justify-content: center;
-    margin-bottom: 20px;
-    width: 100%;
+    margin-bottom: 24px;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+/* 按钮样式 */
+button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    background-color: #4CAF50;
+    color: white;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(79, 70, 229, 0.1);
+}
+
+button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(79, 70, 229, 0.2);
+    background-color: #388E3C;
+}
+
+button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(79, 70, 229, 0.1);
+    background-color: #2E7D32;
+}
+
+/* 编辑器布局 */
+.boxes {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 24px;
+}
+
+/* 输入区域样式 */
+#json-input {
+    flex: 1;
+    min-height: 500px;
+    padding: 16px;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    font-family: 'Fira Code', 'Cascadia Code', 'Source Code Pro', Menlo, Monaco, 'Courier New', monospace;
+    font-size: 14px;
+    line-height: 1.5;
+    resize: none;
+    background: #ffffff;
+    color: #374151;
+    transition: all 0.2s ease;
+}
+
+#json-input:focus {
+    outline: none;
+    border-color: #6366f1;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+/* 输出区域样式 */
+#json-output {
+    flex: 1;
+    min-height: 500px;
+    padding: 16px;
+    margin: 0;
+    background: #ffffff;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    font-family: 'Fira Code', 'Cascadia Code', 'Source Code Pro', Menlo, Monaco, 'Courier New', monospace;
+    font-size: 14px;
+    line-height: 1.5;
+    overflow-x: auto;
+    white-space: pre;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* 语法高亮 */
+#json-output .string { color: #22863a; }
+#json-output .number { color: #005cc5; }
+#json-output .boolean { color: #005cc5; }
+#json-output .null { color: #005cc5; }
+#json-output .key { color: #24292e; }
+#json-output .bracket { color: #24292e; }
+
+/* 数组长度显示 */
+.array-length {
+    color: #6b7280;
+    font-size: 0.9em;
+    margin-left: 0.5em;
+    font-style: italic;
+}
+
+/* 可折叠区域 */
+.collapsible {
+    display: inline;
+}
+
+.toggle {
+    cursor: pointer;
+    user-select: none;
+    display: inline;
+}
+
+.toggle-icon {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    text-align: center;
+    color: #6b7280;
+    transition: transform 0.2s ease;
+    cursor: pointer;
+    margin-right: 0.2em;
+}
+
+.toggle:hover .toggle-icon {
+    color: #0366d6;
+}
+
+.content {
+    display: inline;
+}
+
+.content.collapsed {
+    display: none;
+}
+
+/* 键名后的冒号 */
+.key::after {
+    content: ": ";
+    color: #24292e;
+}
+
+/* 错误提示 */
+.error {
+    color: #dc2626;
+    padding: 8px 12px;
+    background: #fee2e2;
+    border-radius: 6px;
+    margin: 8px 0;
+    font-size: 14px;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    body {
+        padding: 12px;
+    }
+
+    .container {
+        padding: 12px;
+    }
+
+    .boxes {
+        flex-direction: column;
+    }
+    
+    #json-input, #json-output {
+        width: 100%;
+        min-height: 300px;
+    }
+    
+    button {
+        width: 100%;
+    }
+}
+
+/* JSON Formatter 自定义样式 */
+.json-formatter-row {
+    font-family: 'Courier New', monospace !important;
+    font-size: 14px !important;
+    line-height: 1.5 !important;
+}
+
+.json-formatter-row .json-formatter-key {
+    color: #24292e !important;
+    font-weight: 600 !important;
+}
+
+.json-formatter-row .json-formatter-key::before {
+    content: '"';
+}
+
+.json-formatter-row .json-formatter-key::after {
+    content: '"';
+}
+
+.json-formatter-row .json-formatter-string {
+    color: #22863a !important;
+    white-space: pre-wrap !important;
+}
+
+.json-formatter-row .json-formatter-string::before {
+    content: '"';
+    color: #22863a !important;
+}
+
+.json-formatter-row .json-formatter-string::after {
+    content: '"';
+    color: #22863a !important;
+}
+
+.json-formatter-row .json-formatter-number {
+    color: #005cc5 !important;
+}
+
+.json-formatter-row .json-formatter-boolean {
+    color: #005cc5 !important;
+}
+
+.json-formatter-row .json-formatter-null {
+    color: #005cc5 !important;
+}
+
+.json-formatter-row .json-formatter-bracket {
+    color: #24292e !important;
+}
+
+.json-formatter-row .json-formatter-comma {
+    color: #24292e !important;
+}
+
+.json-formatter-row > a > .json-formatter-preview-text {
+    transition: all 0.2s ease;
+}
+
+.json-formatter-row > a > .json-formatter-preview-text .json-formatter-string::before,
+.json-formatter-row > a > .json-formatter-preview-text .json-formatter-string::after {
+    color: inherit !important;
+}
+
+.json-formatter-dark.json-formatter-row {
+    background: none !important;
+}
+
+.json-formatter-dark.json-formatter-row > a > .json-formatter-preview-text {
+    color: #666 !important;
+}
+
+.json-formatter-dark.json-formatter-row .json-formatter-row {
+    margin-left: 1em !important;
+}
+
+.json-formatter-dark.json-formatter-row .json-formatter-toggler {
+    font-size: 0.8em !important;
+    margin-right: 0.3em !important;
+    opacity: 0.8 !important;
+}
+
+.json-formatter-dark.json-formatter-row .json-formatter-toggler:after {
+    content: "▶" !important;
+}
+
+.json-formatter-dark.json-formatter-row .json-formatter-toggler.json-formatter-open:after {
+    content: "▼" !important;
 }

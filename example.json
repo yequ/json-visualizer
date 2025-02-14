@@ -1,0 +1,69 @@
+{
+    "company": {
+        "name": "Tech Innovation Co., Ltd.",
+        "founded": 2010,
+        "isPublic": false,
+        "headquarters": {
+            "city": "Shanghai",
+            "address": "123 Innovation Road",
+            "coordinates": {
+                "latitude": 31.2304,
+                "longitude": 121.4737
+            }
+        }
+    },
+    "products": [
+        {
+            "id": "P001",
+            "name": "Smart Watch Pro",
+            "price": 1299.99,
+            "inStock": true,
+            "categories": ["electronics", "wearables"],
+            "specs": {
+                "display": "AMOLED",
+                "battery": "500mAh",
+                "waterproof": true
+            }
+        },
+        {
+            "id": "P002",
+            "name": "AI Assistant Hub",
+            "price": 899.50,
+            "inStock": false,
+            "categories": ["smart home", "AI"],
+            "specs": {
+                "processor": "Neural Engine 2.0",
+                "memory": "4GB",
+                "connectivity": ["WiFi", "Bluetooth 5.0"]
+            }
+        }
+    ],
+    "employees": {
+        "total": 520,
+        "departments": {
+            "engineering": {
+                "count": 200,
+                "locations": ["Shanghai", "Beijing"],
+                "teams": ["Frontend", "Backend", "Mobile", "AI"]
+            },
+            "sales": {
+                "count": 150,
+                "regions": ["East", "North", "South"],
+                "quarterlyTargets": [1000000, 1200000, 1500000, 2000000]
+            }
+        }
+    },
+    "metadata": {
+        "lastUpdated": "2025-02-14T11:33:11+08:00",
+        "version": "2.1.0",
+        "tags": ["tech", "innovation", "digital"],
+        "status": {
+            "api": "operational",
+            "database": "healthy",
+            "cache": {
+                "hit_rate": 0.95,
+                "size_mb": 512
+            }
+        }
+    }
+}
