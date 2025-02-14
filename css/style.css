@@ -6,6 +6,15 @@ body {
     background: #f8f9fa;
     color: #24292e;
     line-height: 1.6;
+    min-height: 100vh;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+html {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    transition: background-color 0.3s ease;
 }
 
 .container {
@@ -485,6 +494,11 @@ button:active {
 
 /* 暗色模式样式 */
 [data-theme="dark"] {
+    background: #1a1a1a !important;
+    color: #e5e7eb;
+}
+
+[data-theme="dark"] body {
     background: #1a1a1a;
     color: #e5e7eb;
 }
@@ -492,11 +506,13 @@ button:active {
 [data-theme="dark"] .container {
     background: #2d2d2d;
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+    border: 1px solid #404040;
 }
 
 [data-theme="dark"] button {
     background-color: #4CAF50;
     color: #ffffff;
+    border: none;
 }
 
 [data-theme="dark"] button:hover {
@@ -509,6 +525,12 @@ button:active {
     background: #1a1a1a;
     border-color: #404040;
     color: #e5e7eb;
+}
+
+[data-theme="dark"] #json-input:hover,
+[data-theme="dark"] #url-input:hover,
+[data-theme="dark"] #time-input:hover {
+    border-color: #4a4a4a;
 }
 
 [data-theme="dark"] #json-input:focus,
@@ -529,12 +551,57 @@ button:active {
 [data-theme="dark"] .theme-toggle {
     background: #2d2d2d;
     border-color: #404040;
+    color: #e5e7eb;
+}
+
+[data-theme="dark"] .theme-toggle:hover {
+    background: #3d3d3d;
+    border-color: #505050;
 }
 
 [data-theme="dark"] .theme-toggle svg {
     fill: #e5e7eb;
+    stroke: #e5e7eb;
 }
 
 [data-theme="dark"] ::placeholder {
     color: #6b7280;
+}
+
+/* JSON格式化暗色模式样式 */
+[data-theme="dark"] .json-formatter-row {
+    color: #e5e7eb !important;
+}
+
+[data-theme="dark"] .json-formatter-row .json-formatter-string {
+    color: #9ece6a !important;
+}
+
+[data-theme="dark"] .json-formatter-row .json-formatter-number {
+    color: #ff9e64 !important;
+}
+
+[data-theme="dark"] .json-formatter-row .json-formatter-boolean {
+    color: #7aa2f7 !important;
+}
+
+[data-theme="dark"] .json-formatter-row .json-formatter-null {
+    color: #bb9af7 !important;
+}
+
+[data-theme="dark"] .json-formatter-row .json-formatter-object-bracket,
+[data-theme="dark"] .json-formatter-row .json-formatter-array-bracket {
+    color: #89ddff !important;
+}
+
+[data-theme="dark"] .json-formatter-row .json-formatter-key {
+    color: #73daca !important;
+}
+
+[data-theme="dark"] .json-formatter-row .json-formatter-bracket {
+    color: #89ddff !important;
+}
+
+[data-theme="dark"] .json-formatter-row .json-formatter-comma {
+    color: #565f89 !important;
 }
