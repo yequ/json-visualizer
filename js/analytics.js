@@ -1,6 +1,6 @@
 // Google Analytics 4
 function initGA4() {
-    const GA4_ID = 'G-XXXXXXXXXX'; // 替换为你的 GA4 测量 ID
+    const GA4_ID = 'G-RERKY6YDCD'; // 替换为你的 GA4 测量 ID
     
     const script = document.createElement('script');
     script.async = true;
