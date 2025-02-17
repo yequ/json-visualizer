@@ -101,7 +101,7 @@ class JSONVisualizer {
                     const items = data.map(item => 
                         `${nextIndent}${this.renderJSON(item, level + 1)}`
                     ).join(',\n');
-                    return `<div class="collapsible"><span class="toggle-icon">▼</span>[<div class="content">\n${items}\n${indent}]</div></div>`;
+                    return `<div class="collapsible"><span class="toggle-icon">▼</span>[<div class="content">\n${items}\n${indent}]</div><span class="array-length">(${data.length})</span></div>`;
                 } else {
                     const entries = Object.entries(data);
                     if (entries.length === 0) return '{}';
