@@ -145,12 +145,7 @@ button:active {
 /* 可折叠区域 */
 .collapsible {
     display: inline;
-}
-
-.toggle {
     cursor: pointer;
-    user-select: none;
-    display: inline;
 }
 
 .toggle-icon {
@@ -159,12 +154,12 @@ button:active {
     height: 1em;
     text-align: center;
     color: #6b7280;
-    transition: transform 0.2s ease;
     cursor: pointer;
-    margin-right: 0.2em;
+    user-select: none;
+    transition: transform 0.2s ease;
 }
 
-.toggle:hover .toggle-icon {
+.toggle-icon:hover {
     color: #0366d6;
 }
 
@@ -176,10 +171,9 @@ button:active {
     display: none;
 }
 
-/* 键名后的冒号 */
+/* 移除键名后的冒号 */
 .key::after {
-    content: ": ";
-    color: #24292e;
+    content: "";
 }
 
 /* 错误提示 */
