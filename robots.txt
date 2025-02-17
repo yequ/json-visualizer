@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://yequ.github.io/json-visualizer/sitemap.xml
