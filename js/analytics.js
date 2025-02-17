@@ -27,5 +27,5 @@ function initUmami() {
 }
 
 // 初始化统计
-// initGA4(); // 取消注释以启用 Google Analytics
+initGA4(); // 已启用 Google Analytics
 // initUmami(); // 取消注释以启用 Umami
