@@ -106,7 +106,7 @@ class JSONVisualizer {
                     const entries = Object.entries(data);
                     if (entries.length === 0) return '{}';
                     const items = entries.map(([key, value]) => 
-                        `${nextIndent}<span class="key">"${this.escapeHtml(key)}"</span> ${this.renderJSON(value, level + 1)}`
+                        `${nextIndent}<span class="key">"${this.escapeHtml(key)}"</span>: ${this.renderJSON(value, level + 1)}`
                     ).join(',\n');
                     return `<div class="collapsible"><span class="toggle-icon">▼</span>{<div class="content">\n${items}\n${indent}}</div></div>`;
                 }
