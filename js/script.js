@@ -179,6 +179,26 @@ class JSONVisualizer {
     }
 }
 
+// 回到顶部按钮功能
+const backToTopButton = document.querySelector('.back-to-top');
+
+// 监听滚动事件
+window.addEventListener('scroll', () => {
+    if (window.scrollY > 300) {
+        backToTopButton.style.display = 'flex';
+    } else {
+        backToTopButton.style.display = 'none';
+    }
+});
+
+// 点击回到顶部
+function scrollToTop() {
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
+}
+
 // 初始化应用
 document.addEventListener('DOMContentLoaded', () => {
     window.jsonVisualizer = new JSONVisualizer();
