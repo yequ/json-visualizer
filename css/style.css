@@ -173,7 +173,7 @@ button:active {
 
 /* 键名后的冒号 */
 .key::after {
-    content: ":";
+    content: "";
     color: #24292e;
     margin-right: 4px;
 }
