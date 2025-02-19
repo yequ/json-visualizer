@@ -146,8 +146,12 @@ class JSONVisualizer {
 
     escapeJSON() {
         try {
-            const jsonString = this.input.value;
-            this.input.value = JSON.stringify(jsonString).slice(1, -1);
+            let text = this.input.value;
+            // 处理换行符
+            text = text.replace(/\n/g, '\\n');
+            // 处理引号和反斜杠
+            text = text.replace(/"/g, '\\"').replace(/\\/g, '\\\\');
+            this.input.value = text;
             this.handleInput();
         } catch (e) {
             this.showError('Error escaping JSON: ' + e.message);
@@ -156,8 +160,12 @@ class JSONVisualizer {
 
     unescapeJSON() {
         try {
-            const jsonString = this.input.value;
-            this.input.value = jsonString.replace(/\\"/g, '"').replace(/\\\\/g, '\\');
+            let text = this.input.value;
+            // 先处理反斜杠
+            text = text.replace(/\\\\/g, '\\');
+            // 再处理引号和换行符
+            text = text.replace(/\\"/g, '"').replace(/\\n/g, '\n');
+            this.input.value = text;
             this.handleInput();
         } catch (e) {
             this.showError('Error unescaping JSON: ' + e.message);

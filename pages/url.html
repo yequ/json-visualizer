@@ -30,15 +30,13 @@
     </div>
 </header>
 
-<div class="container">
+<div class="container url-encode">
+    <div class="button-group">
+        <button onclick="encodeURL()">URL编码</button>
+        <button onclick="decodeURL()">URL解码</button>
+    </div>
     <div class="boxes">
-        <div class="input-group">
-            <textarea id="url-input" placeholder="在这里输入需要编码或解码的URL..."></textarea>
-            <div class="button-group">
-                <button onclick="encodeURL()">编码</button>
-                <button onclick="decodeURL()">解码</button>
-            </div>
-        </div>
+        <textarea id="url-input" placeholder="在这里输入需要编码或解码的URL..."></textarea>
         <pre id="url-output"></pre>
     </div>
 </div>
