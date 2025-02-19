@@ -1,3 +1,11 @@
+/**
+ * JSON Visualizer - Theme Manager
+ * 
+ * @license MIT
+ * @copyright Copyright (c) 2025 JSON Visualizer
+ * @see https://github.com/yequ/json-visualizer
+ */
+
 // 主题切换功能
 function toggleTheme() {
     const html = document.documentElement;

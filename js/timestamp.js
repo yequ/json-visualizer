@@ -1,3 +1,11 @@
+/**
+ * JSON Visualizer - Timestamp Converter
+ * 
+ * @license MIT
+ * @copyright Copyright (c) 2025 JSON Visualizer
+ * @see https://github.com/yequ/json-visualizer
+ */
+
 function timestampToDate() {
     const input = document.getElementById('time-input').value.trim();
     const output = document.getElementById('time-output');

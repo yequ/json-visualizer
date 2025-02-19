@@ -1,3 +1,11 @@
+/**
+ * JSON Visualizer - Storage Manager
+ * 
+ * @license MIT
+ * @copyright Copyright (c) 2025 JSON Visualizer
+ * @see https://github.com/yequ/json-visualizer
+ */
+
 document.addEventListener('DOMContentLoaded', function() {
     // 当输入框内容改变时，保存数据到sessionStorage
     document.getElementById('json-input').addEventListener('input', function() {
@@ -20,4 +28,3 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 });
-

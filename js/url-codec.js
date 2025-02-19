@@ -1,3 +1,11 @@
+/**
+ * JSON Visualizer - URL Encoder/Decoder
+ * 
+ * @license MIT
+ * @copyright Copyright (c) 2025 JSON Visualizer
+ * @see https://github.com/yequ/json-visualizer
+ */
+
 function encodeURL() {
     const input = document.getElementById('url-input').value;
     try {

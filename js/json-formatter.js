@@ -1,3 +1,11 @@
+/**
+ * JSON Visualizer
+ * 
+ * @license MIT
+ * @copyright Copyright (c) 2025 JSON Visualizer
+ * @see https://github.com/yequ/json-visualizer
+ */
+
 // JSON Visualizer main script
 class JSONVisualizer {
     constructor() {

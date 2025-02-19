@@ -1,3 +1,11 @@
+/**
+ * JSON Visualizer - Analytics
+ * 
+ * @license MIT
+ * @copyright Copyright (c) 2025 JSON Visualizer
+ * @see https://github.com/yequ/json-visualizer
+ */
+
 // Google Analytics 4
 function initGA4() {
     const GA4_ID = 'G-RERKY6YDCD'; // 替换为你的 GA4 测量 ID
