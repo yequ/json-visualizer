@@ -29,7 +29,7 @@ A powerful, lightweight, and user-friendly JSON visualization tool that helps de
 
 ### 🚀 Quick Start
 
-Simply visit [https://json.yequ.me](https://json.yequ.me) to start using JSON Visualizer online.
+Simply visit [https://yequ.github.io/json-visualizer](https://yequ.github.io/json-visualizer) to start using JSON Visualizer online.
 
 #### Local Development
 
