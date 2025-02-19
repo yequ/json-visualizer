@@ -84,10 +84,10 @@ class JSONVisualizer {
         try {
             const json = JSON.parse(jsonStr);
             this.output.innerHTML = this.renderJSON(json);
-            this.output.classList.remove('error');
+            this.output.className = '';
         } catch (e) {
             this.output.innerHTML = `<div class="error">Invalid JSON: ${e.message}</div>`;
-            this.output.classList.add('error');
+            this.output.className = '';
         }
     }
 

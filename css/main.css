@@ -13,6 +13,9 @@
     --shadow-dark: 0 2px 12px rgba(0, 0, 0, 0.3);
     --container-bg-light: #ffffff;
     --container-bg-dark: #25262b;
+    --error-color: #dc2626;
+    --error-bg: #fef2f2;
+    --error-border: #f87171;
 }
 
 [data-theme="dark"] {
@@ -24,6 +27,9 @@
     --border: var(--border-dark);
     --shadow: var(--shadow-dark);
     --container-bg: var(--container-bg-dark);
+    --error-color: #ef4444;
+    --error-bg: #7f1d1d;
+    --error-border: #b91c1c;
 }
 
 [data-theme="light"] {
@@ -156,6 +162,24 @@ pre {
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
+/* 错误提示样式 */
+.error {
+    color: var(--error-color);
+    font-family: 'Fira Code', monospace;
+    font-size: 14px;
+    line-height: 1.5;
+    padding: 16px;
+    background-color: var(--error-bg);
+    border: 1px solid var(--error-border);
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    margin: 0;
+    height: 100%;
+    box-sizing: border-box;
+    display: flex;
+    align-items: flex-start;
+}
+
 /* 按钮组样式 */
 .button-group {
     display: flex;
@@ -227,22 +251,6 @@ pre {
 [data-theme="dark"] .boolean { color: #7aa2f7 !important; }
 [data-theme="dark"] .null { color: #bb9af7 !important; }
 [data-theme="dark"] .key { color: #f7768e !important; }
-
-/* 错误提示 */
-.error {
-    color: #dc2626;
-    padding: 12px 16px;
-    background: #fee2e2;
-    border-radius: 12px;
-    margin: 16px 0;
-    font-size: 15px;
-    border: 1px solid #fecaca;
-}
-
-[data-theme="dark"] .error {
-    background: #451a1a;
-    border-color: #991b1b;
-}
 
 /* 主题切换按钮 */
 .theme-toggle {
