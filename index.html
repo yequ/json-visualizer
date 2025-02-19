@@ -19,28 +19,48 @@
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
 </head>
 <body>
-<div class="container">
-    <div class="buttons-container">
-        <button onclick="window.location.href='index.html'">首页</button>
-        <button onclick="window.location.href='index.html'">JSON格式化</button>
-        <button onclick="window.location.href='pages/url.html'">URL编解码</button>
-        <button onclick="window.location.href='pages/time.html'">时间戳格式化</button>
+<header class="header">
+    <div class="header-content">
+        <a href="index.html" class="logo">JSON 可视化工具</a>
+        <nav class="nav-links">
+            <a href="index.html" class="nav-link active">JSON格式化</a>
+            <a href="pages/url.html" class="nav-link">URL编解码</a>
+            <a href="pages/time.html" class="nav-link">时间戳转换</a>
+            <button class="theme-toggle" onclick="toggleTheme()" title="切换主题">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0M12 3l0 1m0 16l0 1m9 -9l-1 0m-16 0l-1 0m15.5 -6.5l-0.7 0.7m-12.1 12.1l-0.7 0.7m12.1 -12.1l0.7 0.7m-12.1 12.1l0.7 0.7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+                </svg>
+            </button>
+        </nav>
     </div>
+</header>
+
+<div class="container">
     <div class="boxes">
         <textarea id="json-input" placeholder="在这里输入您的 JSON 数据..."></textarea>
         <pre id="json-output"></pre>
     </div>
 </div>
-<button class="theme-toggle" onclick="toggleTheme()">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-        <path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0M12 3l0 1m0 16l0 1m9 -9l-1 0m-16 0l-1 0m15.5 -6.5l-0.7 0.7m-12.1 12.1l-0.7 0.7m12.1 -12.1l0.7 0.7m-12.1 12.1l0.7 0.7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
-    </svg>
-</button>
+
+<footer class="footer">
+    <div class="footer-content">
+        <div class="footer-info">
+            2024 JSON可视化工具 - 让JSON数据更易读
+        </div>
+        <div class="footer-links">
+            <a href="https://github.com/yequ/json-visualizer" class="footer-link" target="_blank">GitHub</a>
+            <a href="https://yequ.github.io/json-visualizer/" class="footer-link" target="_blank">关于我们</a>
+            <a href="mailto:contact@example.com" class="footer-link">联系我们</a>
+        </div>
+    </div>
+</footer>
+
 <button class="back-to-top" onclick="scrollToTop()" title="回到顶部">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M18 15l-6-6-6 6"/>
     </svg>
 </button>
+
 <script src="js/json-visualizer.js"></script>
 <script src="js/theme.js"></script>
 <script src="js/analytics.js"></script>

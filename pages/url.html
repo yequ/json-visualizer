@@ -3,20 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>URL 编解码工具</title>
+    <title>URL编解码工具 - JSON可视化工具</title>
+    <meta name="description" content="在线URL编解码工具，支持URL编码和解码，方便快捷。">
+    <meta name="keywords" content="URL编码,URL解码,URL编解码工具">
+    <meta name="author" content="yequ">
     <link href="../css/style.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
 </head>
 <body>
-<div class="container">
-    <div class="buttons-container">
-        <button onclick="window.location.href='../index.html'">首页</button>
-        <button onclick="window.location.href='../index.html'">JSON格式化</button>
-        <button onclick="window.location.href='url.html'">URL编解码</button>
-        <button onclick="window.location.href='time.html'">时间戳格式化</button>
+<header class="header">
+    <div class="header-content">
+        <a href="../index.html" class="logo">JSON 可视化工具</a>
+        <nav class="nav-links">
+            <a href="../index.html" class="nav-link">首页</a>
+            <a href="../index.html" class="nav-link">JSON格式化</a>
+            <a href="url.html" class="nav-link active">URL编解码</a>
+            <a href="time.html" class="nav-link">时间戳格式化</a>
+            <button class="theme-toggle" onclick="toggleTheme()" title="切换主题">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0M12 3l0 1m0 16l0 1m9 -9l-1 0m-16 0l-1 0m15.5 -6.5l-0.7 0.7m-12.1 12.1l-0.7 0.7m12.1 -12.1l0.7 0.7m-12.1 12.1l0.7 0.7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+                </svg>
+            </button>
+        </nav>
     </div>
+</header>
+
+<div class="container">
     <div class="boxes">
         <div class="input-group">
             <textarea id="url-input" placeholder="在这里输入需要编码或解码的URL..."></textarea>
@@ -28,11 +42,20 @@
         <pre id="url-output"></pre>
     </div>
 </div>
-<button class="theme-toggle" onclick="toggleTheme()">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-        <path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0M12 3l0 1m0 16l0 1m9 -9l-1 0m-16 0l-1 0m15.5 -6.5l-0.7 0.7m-12.1 12.1l-0.7 0.7m12.1 -12.1l0.7 0.7m-12.1 12.1l0.7 0.7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
-    </svg>
-</button>
+
+<footer class="footer">
+    <div class="footer-content">
+        <div class="footer-info">
+            2024 JSON可视化工具 - 让JSON数据更易读
+        </div>
+        <div class="footer-links">
+            <a href="https://github.com/yequ/json-visualizer" class="footer-link" target="_blank">GitHub</a>
+            <a href="https://yequ.github.io/json-visualizer/" class="footer-link" target="_blank">关于我们</a>
+            <a href="mailto:contact@example.com" class="footer-link">联系我们</a>
+        </div>
+    </div>
+</footer>
+
 <script src="../js/url-script.js"></script>
 <script src="../js/theme.js"></script>
 </body>

@@ -29,6 +29,15 @@ class JSONVisualizer {
 
         // 设置拖放功能
         this.setupDragAndDrop();
+
+        // 添加折叠/展开功能的事件委托
+        this.output.addEventListener('click', (e) => {
+            if (e.target.classList.contains('toggle-icon')) {
+                const content = e.target.nextElementSibling;
+                content.classList.toggle('collapsed');
+                e.target.textContent = content.classList.contains('collapsed') ? '▶' : '▼';
+            }
+        });
     }
 
     debounce(func, wait) {
@@ -83,8 +92,8 @@ class JSONVisualizer {
     }
 
     renderJSON(data, level = 0) {
-        const indent = '  '.repeat(level);
-        const nextIndent = '  '.repeat(level + 1);
+        const indent = ' '.repeat(level * 2);
+        const nextIndent = ' '.repeat((level + 1) * 2);
 
         if (data === null) return '<span class="null">null</span>';
 
@@ -99,16 +108,16 @@ class JSONVisualizer {
                 if (Array.isArray(data)) {
                     if (data.length === 0) return '[]';
                     const items = data.map(item => 
-                        `${nextIndent}${this.renderJSON(item, level + 1)}`
-                    ).join(',\n');
-                    return `<div class="collapsible"><span class="toggle-icon">▼</span>[<div class="content">\n${items}\n${indent}]</div><span class="array-length">(${data.length})</span></div>`;
+                        `\n${nextIndent}${this.renderJSON(item, level + 1)}`
+                    ).join(',');
+                    return `<span class="collapsible">[<span class="toggle-icon">▼</span><span class="content">${items}\n${indent}</span>]<span class="array-length">(${data.length})</span></span>`;
                 } else {
                     const entries = Object.entries(data);
                     if (entries.length === 0) return '{}';
                     const items = entries.map(([key, value]) => 
-                        `${nextIndent}<span class="key">"${this.escapeHtml(key)}"</span>: ${this.renderJSON(value, level + 1)}`
-                    ).join(',\n');
-                    return `<div class="collapsible"><span class="toggle-icon">▼</span>{<div class="content">\n${items}\n${indent}}</div></div>`;
+                        `\n${nextIndent}<span class="key">"${this.escapeHtml(key)}"</span>: ${this.renderJSON(value, level + 1)}`
+                    ).join(',');
+                    return `<span class="collapsible">{<span class="toggle-icon">▼</span><span class="content">${items}\n${indent}</span>}</span>`;
                 }
             default:
                 return '';
@@ -199,29 +208,5 @@ function scrollToTop() {
     });
 }
 
-// 初始化应用
-document.addEventListener('DOMContentLoaded', () => {
-    window.jsonVisualizer = new JSONVisualizer();
-    
-    // 添加折叠/展开功能
-    document.addEventListener('click', (e) => {
-        if (e.target.classList.contains('toggle-icon')) {
-            e.preventDefault();
-            e.stopPropagation();
-            
-            const content = e.target.closest('.collapsible').querySelector('.content');
-            content.classList.toggle('collapsed');
-            
-            if (content.classList.contains('collapsed')) {
-                e.target.textContent = '▶';
-            } else {
-                e.target.textContent = '▼';
-            }
-        }
-    });
-});
-
-// 导出公共方法
-window.escapeJSON = () => window.jsonVisualizer.escapeJSON();
-window.unescapeJSON = () => window.jsonVisualizer.unescapeJSON();
-window.compressJSON = () => window.jsonVisualizer.compressJSON();
+// 初始化 JSON 可视化工具
+const jsonVisualizer = new JSONVisualizer();
