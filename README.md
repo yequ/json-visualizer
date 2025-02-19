@@ -39,16 +39,7 @@ git clone https://github.com/yequ/json-visualizer.git
 cd json-visualizer
 ```
 
-2. Open index.html in your browser:
-```bash
-# If you have Python installed
-python -m http.server 8000
-
-# If you have Node.js installed
-npx serve
-```
-
-3. Visit `http://localhost:8000` in your browser
+2. Open `index.html` in your browser
 
 ### 💡 Usage
 
