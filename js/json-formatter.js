@@ -201,18 +201,18 @@ class JSONVisualizer {
         const indent = ' '.repeat(level * 2);
         const nextIndent = ' '.repeat((level + 1) * 2);
 
-        if (data === null) return `<span class="null">null</span><span class="copy-btn" title="复制值" data-value="null">📋</span>`;
+        if (data === null) return `<span class="null">null</span>`;
 
         switch (typeof data) {
             case 'boolean':
-                return `<span class="boolean">${data}</span><span class="copy-btn" title="复制值" data-value="${data}">📋</span>`;
+                return `<span class="boolean">${data}</span>`;
             case 'number':
-                return `<span class="number">${data}</span><span class="copy-btn" title="复制值" data-value="${data}">📋</span>`;
+                return `<span class="number">${data}</span>`;
             case 'string':
-                return `<span class="string">"${this.escapeHtml(data)}"</span><span class="copy-btn" title="复制值" data-value="${this.escapeHtml(data)}">📋</span>`;
+                return `<span class="string">"${this.escapeHtml(data)}"</span>`;
             case 'object':
                 if (Array.isArray(data)) {
-                    if (data.length === 0) return '[]<span class="copy-btn" title="复制数组" data-value="[]">📋</span>';
+                    if (data.length === 0) return '[]';
                     
                     // 对于大型数组，只处理前100个元素
                     let displayData = data;
@@ -238,7 +238,7 @@ class JSONVisualizer {
                     return result;
                 } else {
                     const entries = Object.entries(data);
-                    if (entries.length === 0) return '{}<span class="copy-btn" title="复制对象" data-value="{}">📋</span>';
+                    if (entries.length === 0) return '{}';
                     
                     // 对于大型对象，只处理前100个属性
                     let displayEntries = entries;
