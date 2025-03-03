@@ -252,7 +252,9 @@ pre {
 .number { color: #d19a66; }
 .boolean { color: #61afef; }
 .null { color: #c678dd; }
-.key { color: #e06c75; }
+.key { 
+    color: #e06c75; 
+}
 
 /* 暗黑模式下的JSON格式化样式 */
 [data-theme="dark"] .string { color: #9ece6a !important; }
@@ -787,4 +789,52 @@ pre {
 .load-more:hover {
     background-color: var(--primary-color);
     color: white;
+}
+
+/* 复制按钮样式 */
+.copy-btn {
+    display: inline-block;
+    margin-left: 4px;
+    cursor: pointer;
+    opacity: 0.5;
+    font-size: 0.9em;
+    transition: opacity 0.2s ease;
+    vertical-align: middle;
+}
+
+.copy-btn:hover {
+    opacity: 1;
+}
+
+/* 提示消息样式 */
+.toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    border-radius: 4px;
+    background-color: #4CAF50;
+    color: white;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 0.3s, fadeOut 0.3s 1.7s;
+}
+
+.toast.error {
+    background-color: #f44336;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; transform: translateY(0); }
+    to { opacity: 0; transform: translateY(-20px); }
+}
+
+/* 暗色主题下的复制按钮样式 */
+[data-theme="dark"] .copy-btn {
+    color: #e5e7eb;
 }

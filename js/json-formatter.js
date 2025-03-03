@@ -13,6 +13,8 @@ class JSONVisualizer {
         this.output = document.getElementById('json-output');
         this.initWorker();
         this.init();
+        // 存储当前处理的JSON数据
+        this.currentJsonData = null;
     }
 
     initWorker() {
@@ -63,10 +65,12 @@ class JSONVisualizer {
         // 设置拖放功能
         this.setupDragAndDrop();
 
-        // 添加折叠/展开功能的事件委托
+        // 添加折叠/展开功能和复制功能的事件委托
         this.output.addEventListener('click', (e) => {
             if (e.target.classList.contains('toggle-icon')) {
                 this.toggleNode(e.target);
+            } else if (e.target.classList.contains('copy-btn')) {
+                this.copyToClipboard(e.target.dataset.value);
             }
         });
 
@@ -182,6 +186,7 @@ class JSONVisualizer {
             // 在主线程中处理 JSON
             try {
                 const json = JSON.parse(jsonStr);
+                this.currentJsonData = json;
                 const formattedHTML = this.renderJSONToHTML(json);
                 this.output.innerHTML = formattedHTML;
                 this.output.className = '';
@@ -196,18 +201,18 @@ class JSONVisualizer {
         const indent = ' '.repeat(level * 2);
         const nextIndent = ' '.repeat((level + 1) * 2);
 
-        if (data === null) return '<span class="null">null</span>';
+        if (data === null) return `<span class="null">null</span><span class="copy-btn" title="复制值" data-value="null">📋</span>`;
 
         switch (typeof data) {
             case 'boolean':
-                return `<span class="boolean">${data}</span>`;
+                return `<span class="boolean">${data}</span><span class="copy-btn" title="复制值" data-value="${data}">📋</span>`;
             case 'number':
-                return `<span class="number">${data}</span>`;
+                return `<span class="number">${data}</span><span class="copy-btn" title="复制值" data-value="${data}">📋</span>`;
             case 'string':
-                return `<span class="string">"${this.escapeHtml(data)}"</span>`;
+                return `<span class="string">"${this.escapeHtml(data)}"</span><span class="copy-btn" title="复制值" data-value="${this.escapeHtml(data)}">📋</span>`;
             case 'object':
                 if (Array.isArray(data)) {
-                    if (data.length === 0) return '[]';
+                    if (data.length === 0) return '[]<span class="copy-btn" title="复制数组" data-value="[]">📋</span>';
                     
                     // 对于大型数组，只处理前100个元素
                     let displayData = data;
@@ -218,11 +223,13 @@ class JSONVisualizer {
                         hasMore = true;
                     }
                     
-                    const items = displayData.map(item => 
-                        `\n${nextIndent}${this.renderJSONToHTML(item, level + 1)}`
-                    ).join(',');
+                    const items = displayData.map((item, index) => {
+                        return `\n${nextIndent}${this.renderJSONToHTML(item, level + 1)}`;
+                    }).join(',');
                     
-                    let result = `<span class="collapsible">[<span class="toggle-icon">▼</span><span class="content">${items}\n${indent}</span>]<span class="array-length">(${data.length})</span></span>`;
+                    // 将完整数组转为JSON字符串用于复制
+                    const fullArrayJson = JSON.stringify(data);
+                    let result = `<span class="collapsible">[<span class="toggle-icon">▼</span><span class="content">${items}\n${indent}</span>]<span class="array-length">(${data.length})</span><span class="copy-btn" title="复制数组" data-value='${this.escapeHtml(fullArrayJson)}'>📋</span></span>`;
                     
                     if (hasMore) {
                         result += `<div class="large-data-notice">显示前100项，共${data.length}项</div>`;
@@ -231,7 +238,7 @@ class JSONVisualizer {
                     return result;
                 } else {
                     const entries = Object.entries(data);
-                    if (entries.length === 0) return '{}';
+                    if (entries.length === 0) return '{}<span class="copy-btn" title="复制对象" data-value="{}">📋</span>';
                     
                     // 对于大型对象，只处理前100个属性
                     let displayEntries = entries;
@@ -242,11 +249,13 @@ class JSONVisualizer {
                         hasMore = true;
                     }
                     
-                    const items = displayEntries.map(([key, value]) => 
-                        `\n${nextIndent}<span class="key">"${this.escapeHtml(key)}"</span>: ${this.renderJSONToHTML(value, level + 1)}`
-                    ).join(',');
+                    const items = displayEntries.map(([key, value]) => {
+                        return `\n${nextIndent}<span class="key">"${this.escapeHtml(key)}"</span>: ${this.renderJSONToHTML(value, level + 1)}`;
+                    }).join(',');
                     
-                    let result = `<span class="collapsible">{<span class="toggle-icon">▼</span><span class="content">${items}\n${indent}</span>}</span>`;
+                    // 将完整对象转为JSON字符串用于复制
+                    const fullObjectJson = JSON.stringify(data);
+                    let result = `<span class="collapsible">{<span class="toggle-icon">▼</span><span class="content">${items}\n${indent}</span>}<span class="copy-btn" title="复制对象" data-value='${this.escapeHtml(fullObjectJson)}'>📋</span></span>`;
                     
                     if (hasMore) {
                         result += `<div class="large-data-notice">显示前100个属性，共${entries.length}个</div>`;
@@ -369,6 +378,32 @@ class JSONVisualizer {
         toast.textContent = message;
         document.body.appendChild(toast);
         setTimeout(() => toast.remove(), 2000);
+    }
+
+    copyToClipboard(text) {
+        try {
+            // 尝试解析JSON字符串，如果是有效的JSON，则格式化后复制
+            const jsonObj = JSON.parse(text);
+            const formattedJson = JSON.stringify(jsonObj, null, 2);
+            navigator.clipboard.writeText(formattedJson)
+                .then(() => {
+                    this.showToast('复制成功！', false);
+                })
+                .catch(err => {
+                    console.error('复制失败:', err);
+                    this.showToast('复制失败，请重试', true);
+                });
+        } catch (e) {
+            // 如果不是有效的JSON，直接复制文本
+            navigator.clipboard.writeText(text)
+                .then(() => {
+                    this.showToast('复制成功！', false);
+                })
+                .catch(err => {
+                    console.error('复制失败:', err);
+                    this.showToast('复制失败，请重试', true);
+                });
+        }
     }
 }
 
