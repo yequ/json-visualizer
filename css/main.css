@@ -16,6 +16,8 @@
     --error-color: #dc2626;
     --error-bg: #fef2f2;
     --error-border: #f87171;
+    --lazy-load-bg: #f3f4f6;
+    --lazy-load-bg-dark: #2d2d2d;
 }
 
 [data-theme="dark"] {
@@ -30,6 +32,7 @@
     --error-color: #ef4444;
     --error-bg: #7f1d1d;
     --error-border: #b91c1c;
+    --lazy-load-bg: var(--lazy-load-bg-dark);
 }
 
 [data-theme="light"] {
@@ -38,6 +41,7 @@
     --border: var(--border-light);
     --shadow: var(--shadow-light);
     --container-bg: var(--container-bg-light);
+    --lazy-load-bg: var(--lazy-load-bg);
 }
 
 /* 基础样式 */
@@ -101,7 +105,7 @@ button:active {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     gap: 16px;
-    height: 400px;
+    height: 600px; /* 增加高度 */
     box-sizing: border-box;
 }
 
@@ -160,6 +164,7 @@ pre {
     box-sizing: border-box;
     min-width: 0;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    position: relative;
 }
 
 /* 错误提示样式 */
@@ -230,11 +235,15 @@ pre {
 @media (max-width: 768px) {
     .boxes {
         grid-template-columns: 1fr;
-        gap: 16px;
+        height: auto; /* 在移动设备上自适应高度 */
     }
     
     .container {
         padding: 16px;
+    }
+
+    textarea, pre {
+        height: 300px; /* 在移动设备上设置固定高度 */
     }
 }
 
@@ -422,7 +431,7 @@ pre {
     color: #e5e7eb !important;
 }
 
-[data-theme="dark"] .json-formatter-dark.json-formatter-row .json-formatter-toggler:after {
+[data-theme="dark"] .json-formatter-row .json-formatter-toggler:after {
     color: #e5e7eb !important;
 }
 
@@ -654,13 +663,128 @@ pre {
     }
 }
 
-/* 响应式布局 */
-@media (max-width: 768px) {
-    .boxes {
-        grid-template-columns: 1fr;
+/* 虚拟滚动相关样式 */
+.virtual-scroll-container {
+    position: relative;
+    overflow: auto;
+    height: 100%;
+    width: 100%;
+}
+
+.virtual-scroll-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+
+/* 延迟加载样式 */
+.lazy-load {
+    padding: 8px;
+    margin: 4px 0;
+    background-color: var(--lazy-load-bg);
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.2s ease;
+}
+
+.lazy-load:hover {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+/* 加载指示器 */
+.loading-indicator {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    border-top-color: var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
     }
-    
-    .container {
-        padding: 16px;
-    }
+}
+
+/* 大型数据提示 */
+.large-data-notice {
+    padding: 8px;
+    margin: 4px 0;
+    background-color: rgba(255, 193, 7, 0.1);
+    border-left: 3px solid #ffc107;
+    color: #856404;
+    font-size: 0.9em;
+}
+
+[data-theme="dark"] .large-data-notice {
+    background-color: rgba(255, 193, 7, 0.05);
+    color: #e5e7eb;
+    border-left-color: #ffc107;
+}
+
+/* 性能优化提示 */
+.performance-tip {
+    margin-top: 8px;
+    padding: 8px;
+    background-color: rgba(13, 110, 253, 0.1);
+    border-left: 3px solid #0d6efd;
+    color: #084298;
+    font-size: 0.9em;
+}
+
+[data-theme="dark"] .performance-tip {
+    background-color: rgba(13, 110, 253, 0.05);
+    color: #e5e7eb;
+    border-left-color: #0d6efd;
+}
+
+/* 虚拟滚动相关样式 */
+.virtual-scroll-viewport {
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+    position: relative;
+}
+
+.virtual-scroll-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+
+.virtual-scroll-spacer {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 1px;
+    width: 1px;
+    visibility: hidden;
+}
+
+/* 加载更多按钮 */
+.load-more {
+    display: block;
+    width: 100%;
+    padding: 8px;
+    margin: 8px 0;
+    text-align: center;
+    background-color: var(--lazy-load-bg);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    color: var(--text);
+    transition: background-color 0.2s ease;
+}
+
+.load-more:hover {
+    background-color: var(--primary-color);
+    color: white;
 }

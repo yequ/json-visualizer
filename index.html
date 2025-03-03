@@ -39,10 +39,15 @@
     <div class="button-group">
         <button onclick="jsonVisualizer.escapeJSON()">添加转义</button>
         <button onclick="jsonVisualizer.unescapeJSON()">去除转义</button>
+        <button onclick="jsonVisualizer.compressJSON()">压缩JSON</button>
+        <button onclick="jsonVisualizer.collapseAll()">全部折叠</button>
+        <button onclick="jsonVisualizer.expandAll()">全部展开</button>
     </div>
     <div class="boxes">
         <textarea id="json-input" placeholder="在这里输入您的 JSON 数据..."></textarea>
-        <pre id="json-output"></pre>
+        <div class="virtual-scroll-viewport">
+            <pre id="json-output"></pre>
+        </div>
     </div>
 </div>
 
