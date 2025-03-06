@@ -273,6 +273,8 @@ class JSONVisualizer {
             this.output.innerHTML = data;
         } else {
             this.output.innerHTML = this.renderJSONToHTML(data);
+            // 移除错误类，确保在从错误 JSON 修改为正确 JSON 时，错误提示的红色效果消失
+            this.output.classList.remove('error');
         }
         this.applyStyles();
     }
