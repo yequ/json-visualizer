@@ -47,20 +47,12 @@ function processJSONNode(node, level, maxLevel) {
     // 如果超过最大级别，返回占位符
     if (level >= maxLevel) {
         if (Array.isArray(node)) {
-            return {
-                type: 'lazy-array',
-                length: node.length,
-                preview: node.slice(0, 10),
-                fullData: node
-            };
+            // 返回数组的前10个元素作为预览
+            return node.slice(0, 10);
         } else {
             const keys = Object.keys(node);
-            return {
-                type: 'lazy-object',
-                length: keys.length,
-                preview: Object.fromEntries(keys.slice(0, 10).map(key => [key, node[key]])),
-                fullData: node
-            };
+            // 返回对象的前10个属性作为预览
+            return Object.fromEntries(keys.slice(0, 10).map(key => [key, node[key]]));
         }
     }
     
@@ -68,14 +60,7 @@ function processJSONNode(node, level, maxLevel) {
     if (Array.isArray(node)) {
         // 如果是大型数组，只处理部分元素
         if (node.length > 100) {
-            const processed = node.slice(0, 100).map(item => processJSONNode(item, level + 1, maxLevel));
-            return {
-                type: 'large-array',
-                processed,
-                length: node.length,
-                hasMore: true,
-                fullData: node
-            };
+            return node.slice(0, 100).map(item => processJSONNode(item, level + 1, maxLevel));
         }
         
         return node.map(item => processJSONNode(item, level + 1, maxLevel));
