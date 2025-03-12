@@ -214,16 +214,8 @@ class JSONVisualizer {
                 if (Array.isArray(data)) {
                     if (data.length === 0) return '[]';
                     
-                    // 对于大型数组，只处理前100个元素
-                    let displayData = data;
-                    let hasMore = false;
-                    
-                    if (data.length > 100) {
-                        displayData = data.slice(0, 100);
-                        hasMore = true;
-                    }
-                    
-                    const items = displayData.map((item, index) => {
+                    // 不再限制元素数量，显示所有元素
+                    const items = data.map((item, index) => {
                         return `\n${nextIndent}${this.renderJSONToHTML(item, level + 1)}`;
                     }).join(',');
                     
@@ -231,35 +223,19 @@ class JSONVisualizer {
                     const fullArrayJson = JSON.stringify(data);
                     let result = `<span class="collapsible">[<span class="toggle-icon">▼</span><span class="content">${items}\n${indent}</span>]<span class="array-length">(${data.length})</span><span class="copy-btn" title="复制数组" data-value='${this.escapeHtml(fullArrayJson)}'>📋</span></span>`;
                     
-                    if (hasMore) {
-                        result += `<div class="large-data-notice">显示前100项，共${data.length}项</div>`;
-                    }
-                    
                     return result;
                 } else {
                     const entries = Object.entries(data);
                     if (entries.length === 0) return '{}';
                     
-                    // 对于大型对象，只处理前100个属性
-                    let displayEntries = entries;
-                    let hasMore = false;
-                    
-                    if (entries.length > 100) {
-                        displayEntries = entries.slice(0, 100);
-                        hasMore = true;
-                    }
-                    
-                    const items = displayEntries.map(([key, value]) => {
+                    // 不再限制属性数量，显示所有属性
+                    const items = entries.map(([key, value]) => {
                         return `\n${nextIndent}<span class="key">"${this.escapeHtml(key)}"</span>: ${this.renderJSONToHTML(value, level + 1)}`;
                     }).join(',');
                     
                     // 将完整对象转为JSON字符串用于复制
                     const fullObjectJson = JSON.stringify(data);
                     let result = `<span class="collapsible">{<span class="toggle-icon">▼</span><span class="content">${items}\n${indent}</span>}<span class="copy-btn" title="复制对象" data-value='${this.escapeHtml(fullObjectJson)}'>📋</span></span>`;
-                    
-                    if (hasMore) {
-                        result += `<div class="large-data-notice">显示前100个属性，共${entries.length}个</div>`;
-                    }
                     
                     return result;
                 }
