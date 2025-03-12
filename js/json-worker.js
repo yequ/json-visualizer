@@ -91,12 +91,7 @@ function processJSONNode(node, level, maxLevel) {
             processed[key] = processJSONNode(node[key], level + 1, maxLevel);
         });
         
-        return {
-            processed,
-            length: keys.length,
-            hasMore: true,
-            fullData: node
-        };
+        return processed;
     }
     
     // 处理普通对象
