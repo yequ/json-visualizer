@@ -92,7 +92,6 @@ function processJSONNode(node, level, maxLevel) {
         });
         
         return {
-            type: 'large-object',
             processed,
             length: keys.length,
             hasMore: true,
