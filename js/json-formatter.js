@@ -345,6 +345,16 @@ class JSONVisualizer {
         }
     }
 
+    beautifyJSON() {
+        try {
+            const json = JSON.parse(this.input.value);
+            this.input.value = JSON.stringify(json, null, 2);
+            this.handleInput();
+        } catch (e) {
+            this.showError('Error beautifying JSON: ' + e.message);
+        }
+    }
+
     showError(message) {
         this.output.innerHTML = `<span class="error">${message}</span>`;
         this.output.classList.add('error');
@@ -363,24 +373,49 @@ class JSONVisualizer {
             // 尝试解析JSON字符串，如果是有效的JSON，则格式化后复制
             const jsonObj = JSON.parse(text);
             const formattedJson = JSON.stringify(jsonObj, null, 2);
-            navigator.clipboard.writeText(formattedJson)
-                .then(() => {
-                    this.showToast('复制成功！', false);
-                })
-                .catch(err => {
-                    console.error('复制失败:', err);
-                    this.showToast('复制失败，请重试', true);
-                });
+            this.writeToClipboard(formattedJson);
         } catch (e) {
             // 如果不是有效的JSON，直接复制文本
+            this.writeToClipboard(text);
+        }
+    }
+
+    writeToClipboard(text) {
+        // 方法1: 使用现代 Clipboard API
+        if (navigator.clipboard && navigator.clipboard.writeText) {
             navigator.clipboard.writeText(text)
                 .then(() => {
                     this.showToast('复制成功！', false);
                 })
                 .catch(err => {
-                    console.error('复制失败:', err);
-                    this.showToast('复制失败，请重试', true);
+                    console.error('Clipboard API 复制失败:', err);
+                    this.fallbackCopyToClipboard(text);
                 });
+        } else {
+            // 方法2: 使用 document.execCommand 作为回退
+            this.fallbackCopyToClipboard(text);
+        }
+    }
+
+    fallbackCopyToClipboard(text) {
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.style.position = 'fixed';  // 防止页面滚动
+        document.body.appendChild(textarea);
+        textarea.select();
+        
+        try {
+            const successful = document.execCommand('copy');
+            if (successful) {
+                this.showToast('复制成功！', false);
+            } else {
+                this.showToast('复制失败，请手动复制', true);
+            }
+        } catch (err) {
+            console.error('execCommand 复制失败:', err);
+            this.showToast('复制失败，请手动复制', true);
+        } finally {
+            document.body.removeChild(textarea);
         }
     }
 }
