@@ -368,55 +368,69 @@ class JSONVisualizer {
         setTimeout(() => toast.remove(), 2000);
     }
 
-    copyToClipboard(text) {
-        try {
-            // 尝试解析JSON字符串，如果是有效的JSON，则格式化后复制
-            const jsonObj = JSON.parse(text);
-            const formattedJson = JSON.stringify(jsonObj, null, 2);
-            this.writeToClipboard(formattedJson);
-        } catch (e) {
-            // 如果不是有效的JSON，直接复制文本
-            this.writeToClipboard(text);
+    copyJSON() {
+        if (!this.currentJsonData) {
+            this.showError('没有可复制的 JSON 数据');
+            return;
         }
+        const jsonStr = JSON.stringify(this.currentJsonData, null, 2);
+        this.copyToClipboard(jsonStr);
     }
 
-    writeToClipboard(text) {
-        // 方法1: 使用现代 Clipboard API
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-            navigator.clipboard.writeText(text)
-                .then(() => {
-                    this.showToast('复制成功！', false);
-                })
-                .catch(err => {
-                    console.error('Clipboard API 复制失败:', err);
-                    this.fallbackCopyToClipboard(text);
-                });
+    copyToClipboard(text) {
+        if (navigator.clipboard && window.isSecureContext) {
+            this.writeToClipboard(text);
         } else {
-            // 方法2: 使用 document.execCommand 作为回退
             this.fallbackCopyToClipboard(text);
         }
     }
 
+    writeToClipboard(text) {
+        navigator.clipboard.writeText(text).then(() => {
+            this.showCopySuccess();
+        }).catch(err => {
+            console.error('Failed to copy text: ', err);
+            this.fallbackCopyToClipboard(text);
+        });
+    }
+
     fallbackCopyToClipboard(text) {
-        const textarea = document.createElement('textarea');
-        textarea.value = text;
-        textarea.style.position = 'fixed';  // 防止页面滚动
-        document.body.appendChild(textarea);
-        textarea.select();
-        
         try {
-            const successful = document.execCommand('copy');
-            if (successful) {
-                this.showToast('复制成功！', false);
-            } else {
-                this.showToast('复制失败，请手动复制', true);
-            }
-        } catch (err) {
-            console.error('execCommand 复制失败:', err);
-            this.showToast('复制失败，请手动复制', true);
-        } finally {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
             document.body.removeChild(textarea);
+            this.showCopySuccess();
+        } catch (e) {
+            console.error('Failed to copy text: ', e);
+            this.showError('复制失败，请手动复制');
         }
+    }
+
+    showCopySuccess() {
+        // 创建提示元素
+        const toast = document.createElement('div');
+        toast.className = 'copy-toast';
+        toast.textContent = '已复制到剪贴板';
+        document.body.appendChild(toast);
+
+        // 添加动画类
+        setTimeout(() => toast.classList.add('show'), 10);
+
+        // 3秒后移除提示
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => document.body.removeChild(toast), 300);
+        }, 3000);
+    }
+
+    clearJSON() {
+        this.input.value = '';
+        this.output.innerHTML = '';
+        sessionStorage.removeItem('jsonData');
+        this.currentJsonData = null;
     }
 }
 

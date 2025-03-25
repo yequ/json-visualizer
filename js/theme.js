@@ -39,14 +39,14 @@ function updateThemeIcon(mode, effectiveTheme) {
     if (!icon) return;
     
     if (mode === 'auto') {
-        // 自动模式图标（双箭头循环）
-        icon.innerHTML = `<path d="M8 3a5 5 0 0 0-5 5v1h1v-1a4 4 0 0 1 4-4h1V3H8zm8 0h-1v1h1a4 4 0 0 1 4 4v1h1v-1a5 5 0 0 0-5-5zm-8 18h1v-1H8a4 4 0 0 1-4-4v-1H3v1a5 5 0 0 0 5 5zm8 0a5 5 0 0 0 5-5v-1h-1v1a4 4 0 0 1-4 4h-1v1h1z" stroke="currentColor" stroke-width="1.5"/>`;
+        // 自动模式图标（循环箭头）
+        icon.innerHTML = `<path d="M12 3a9 9 0 1 0 9 9h-1a8 8 0 1 1-8-8V3zm0 18a9 9 0 1 1-9-9h1a8 8 0 1 0 8 8v1z" fill="currentColor" stroke="none"/>`;
     } else if (effectiveTheme === 'dark') {
         // 暗色模式图标（月亮）
-        icon.innerHTML = `<path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>`;
+        icon.innerHTML = `<path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" fill="currentColor" stroke="none"/>`;
     } else {
         // 亮色模式图标（太阳）
-        icon.innerHTML = `<path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0M12 3l0 1m0 16l0 1m9 -9l-1 0m-16 0l-1 0m15.5 -6.5l-0.7 0.7m-12.1 12.1l-0.7 0.7m12.1 -12.1l0.7 0.7m-12.1 12.1l0.7 0.7" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>`;
+        icon.innerHTML = `<path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0M12 3l0 1m0 16l0 1m9 -9l-1 0m-16 0l-1 0m15.5 -6.5l-0.7 0.7m-12.1 12.1l-0.7 0.7m12.1 -12.1l0.7 0.7m-12.1 12.1l0.7 0.7" fill="currentColor" stroke="none"/>`;
     }
 }
 
@@ -68,7 +68,7 @@ function watchSystemTheme() {
 
 // 初始化主题
 function initTheme() {
-    const savedMode = localStorage.getItem('theme') || 'light';
+    const savedMode = localStorage.getItem('theme') || 'auto';
     setTheme(savedMode);
     watchSystemTheme();
 }
