@@ -262,6 +262,10 @@ class JSONVisualizer {
     }
 
     collapseAll() {
+        if (!this.input.value.trim()) {
+            this.showError('请输入JSON数据');
+            return;
+        }
         // 保留第一级可见，折叠其他所有级别
         const topLevelCollapsibles = this.output.querySelectorAll(':scope > .collapsible');
         topLevelCollapsibles.forEach(collapsible => {
@@ -284,6 +288,10 @@ class JSONVisualizer {
     }
 
     expandAll() {
+        if (!this.input.value.trim()) {
+            this.showError('请输入JSON数据');
+            return;
+        }
         const allCollapsibles = this.output.querySelectorAll('.collapsible');
         allCollapsibles.forEach(collapsible => {
             const toggleIcon = collapsible.querySelector(':scope > .toggle-icon');
@@ -309,6 +317,10 @@ class JSONVisualizer {
 
     escapeJSON() {
         try {
+            if (!this.input.value.trim()) {
+                this.showError('请输入JSON数据');
+                return;
+            }
             let text = this.input.value;
             // 处理换行符
             text = text.replace(/\n/g, '\\n');
@@ -323,6 +335,10 @@ class JSONVisualizer {
 
     unescapeJSON() {
         try {
+            if (!this.input.value.trim()) {
+                this.showError('请输入JSON数据');
+                return;
+            }
             let text = this.input.value;
             // 先处理反斜杠
             text = text.replace(/\\\\/g, '\\');
@@ -337,6 +353,10 @@ class JSONVisualizer {
 
     compressJSON() {
         try {
+            if (!this.input.value.trim()) {
+                this.showError('请输入JSON数据');
+                return;
+            }
             const json = JSON.parse(this.input.value);
             this.input.value = JSON.stringify(json);
             this.handleInput();
@@ -347,6 +367,10 @@ class JSONVisualizer {
 
     beautifyJSON() {
         try {
+            if (!this.input.value.trim()) {
+                this.showError('请输入JSON数据');
+                return;
+            }
             const json = JSON.parse(this.input.value);
             this.input.value = JSON.stringify(json, null, 2);
             this.handleInput();
@@ -369,6 +393,10 @@ class JSONVisualizer {
     }
 
     copyJSON() {
+        if (!this.input.value.trim()) {
+            this.showError('请输入JSON数据');
+            return;
+        }
         if (!this.currentJsonData) {
             this.showError('没有可复制的 JSON 数据');
             return;
