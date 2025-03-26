@@ -11,17 +11,10 @@ class JSONVisualizer {
     constructor() {
         this.input = document.getElementById('json-input');
         this.output = document.getElementById('json-output');
-        this.historyList = document.getElementById('json-history');
         this.initWorker();
         this.init();
         // 存储当前处理的JSON数据
         this.currentJsonData = null;
-        // 初始化历史记录
-        this.history = JSON.parse(localStorage.getItem('jsonHistory') || '[]');
-        this.maxHistoryItems = 10;
-        this.renderHistory();
-        // 初始化主题
-        this.initTheme();
     }
 
     initWorker() {
@@ -185,7 +178,7 @@ class JSONVisualizer {
         });
     }
 
-    formatJSON(jsonStr, addToHistory = true) {
+    formatJSON(jsonStr) {
         if (this.hasWorker) {
             // 使用 Web Worker 处理 JSON
             this.worker.postMessage({ action: 'format', data: jsonStr });
@@ -198,11 +191,6 @@ class JSONVisualizer {
                 this.output.innerHTML = formattedHTML;
                 this.output.className = '';
                 this.applyStyles();
-                
-                // 只有在需要时才添加到历史记录
-                if (addToHistory) {
-                    this.addToHistory(jsonStr);
-                }
             } catch (e) {
                 this.showError(`Invalid JSON: ${e.message}`);
             }
@@ -274,10 +262,6 @@ class JSONVisualizer {
     }
 
     collapseAll() {
-        if (!this.input.value.trim()) {
-            this.showError('请输入JSON数据');
-            return;
-        }
         // 保留第一级可见，折叠其他所有级别
         const topLevelCollapsibles = this.output.querySelectorAll(':scope > .collapsible');
         topLevelCollapsibles.forEach(collapsible => {
@@ -300,10 +284,6 @@ class JSONVisualizer {
     }
 
     expandAll() {
-        if (!this.input.value.trim()) {
-            this.showError('请输入JSON数据');
-            return;
-        }
         const allCollapsibles = this.output.querySelectorAll('.collapsible');
         allCollapsibles.forEach(collapsible => {
             const toggleIcon = collapsible.querySelector(':scope > .toggle-icon');
@@ -329,10 +309,6 @@ class JSONVisualizer {
 
     escapeJSON() {
         try {
-            if (!this.input.value.trim()) {
-                this.showError('请输入JSON数据');
-                return;
-            }
             let text = this.input.value;
             // 处理换行符
             text = text.replace(/\n/g, '\\n');
@@ -347,10 +323,6 @@ class JSONVisualizer {
 
     unescapeJSON() {
         try {
-            if (!this.input.value.trim()) {
-                this.showError('请输入JSON数据');
-                return;
-            }
             let text = this.input.value;
             // 先处理反斜杠
             text = text.replace(/\\\\/g, '\\');
@@ -365,29 +337,11 @@ class JSONVisualizer {
 
     compressJSON() {
         try {
-            if (!this.input.value.trim()) {
-                this.showError('请输入JSON数据');
-                return;
-            }
             const json = JSON.parse(this.input.value);
             this.input.value = JSON.stringify(json);
             this.handleInput();
         } catch (e) {
             this.showError('Error compressing JSON: ' + e.message);
-        }
-    }
-
-    beautifyJSON() {
-        try {
-            if (!this.input.value.trim()) {
-                this.showError('请输入JSON数据');
-                return;
-            }
-            const json = JSON.parse(this.input.value);
-            this.input.value = JSON.stringify(json, null, 2);
-            this.handleInput();
-        } catch (e) {
-            this.showError('Error beautifying JSON: ' + e.message);
         }
     }
 
@@ -404,224 +358,29 @@ class JSONVisualizer {
         setTimeout(() => toast.remove(), 2000);
     }
 
-    copyJSON() {
-        if (!this.input.value.trim()) {
-            this.showError('请输入JSON数据');
-            return;
-        }
-        if (!this.currentJsonData) {
-            this.showError('没有可复制的 JSON 数据');
-            return;
-        }
-        const jsonStr = JSON.stringify(this.currentJsonData, null, 2);
-        this.copyToClipboard(jsonStr);
-    }
-
     copyToClipboard(text) {
-        if (navigator.clipboard && window.isSecureContext) {
-            this.writeToClipboard(text);
-        } else {
-            this.fallbackCopyToClipboard(text);
-        }
-    }
-
-    writeToClipboard(text) {
-        navigator.clipboard.writeText(text).then(() => {
-            this.showCopySuccess();
-        }).catch(err => {
-            console.error('Failed to copy text: ', err);
-            this.fallbackCopyToClipboard(text);
-        });
-    }
-
-    fallbackCopyToClipboard(text) {
         try {
-            const textarea = document.createElement('textarea');
-            textarea.value = text;
-            document.body.appendChild(textarea);
-            textarea.select();
-            document.execCommand('copy');
-            document.body.removeChild(textarea);
-            this.showCopySuccess();
+            // 尝试解析JSON字符串，如果是有效的JSON，则格式化后复制
+            const jsonObj = JSON.parse(text);
+            const formattedJson = JSON.stringify(jsonObj, null, 2);
+            navigator.clipboard.writeText(formattedJson)
+                .then(() => {
+                    this.showToast('复制成功！', false);
+                })
+                .catch(err => {
+                    console.error('复制失败:', err);
+                    this.showToast('复制失败，请重试', true);
+                });
         } catch (e) {
-            console.error('Failed to copy text: ', e);
-            this.showError('复制失败，请手动复制');
-        }
-    }
-
-    showCopySuccess() {
-        // 创建提示元素
-        const toast = document.createElement('div');
-        toast.className = 'copy-toast';
-        toast.textContent = '已复制到剪贴板';
-        document.body.appendChild(toast);
-
-        // 添加动画类
-        setTimeout(() => toast.classList.add('show'), 10);
-
-        // 3秒后移除提示
-        setTimeout(() => {
-            toast.classList.remove('show');
-            setTimeout(() => document.body.removeChild(toast), 300);
-        }, 3000);
-    }
-
-    clearJSON() {
-        this.input.value = '';
-        this.output.innerHTML = '';
-        sessionStorage.removeItem('jsonData');
-        this.currentJsonData = null;
-    }
-
-    addToHistory(jsonStr) {
-        // 移除重复项
-        this.history = this.history.filter(item => item.data !== jsonStr);
-        
-        // 添加到开头
-        this.history.unshift({
-            data: jsonStr,
-            time: new Date().toLocaleString(),
-            preview: this.getPreview(jsonStr)
-        });
-        
-        // 限制历史记录数量
-        if (this.history.length > this.maxHistoryItems) {
-            this.history.pop();
-        }
-        
-        // 保存到本地存储
-        localStorage.setItem('jsonHistory', JSON.stringify(this.history));
-        
-        // 更新显示
-        this.renderHistory();
-    }
-
-    getPreview(jsonStr) {
-        try {
-            const json = JSON.parse(jsonStr);
-            return JSON.stringify(json).slice(0, 50) + (JSON.stringify(json).length > 50 ? '...' : '');
-        } catch (e) {
-            return jsonStr.slice(0, 50) + (jsonStr.length > 50 ? '...' : '');
-        }
-    }
-
-    renderHistory() {
-        const historyList = document.getElementById('json-history');
-        historyList.innerHTML = this.history.map(item => `
-            <div class="history-item" data-json='${this.escapeHtml(item.data)}'>
-                <div class="history-content">
-                    <span class="preview">${this.escapeHtml(item.preview)}</span>
-                    <span class="time">${item.time}</span>
-                </div>
-            </div>
-        `).join('');
-
-        // 添加点击事件监听和悬浮预览功能
-        const historyItems = historyList.querySelectorAll('.history-item');
-        historyItems.forEach(item => {
-            // 点击加载历史记录
-            item.addEventListener('click', () => {
-                const jsonStr = item.dataset.json;
-                if (jsonStr) {
-                    this.loadFromHistory(jsonStr);
-                }
-            });
-
-            // 添加悬浮预览功能
-            item.addEventListener('mouseenter', (e) => {
-                const preview = document.createElement('div');
-                preview.className = 'history-preview';
-                preview.innerHTML = `<pre>${this.escapeHtml(item.dataset.json)}</pre>`;
-                document.body.appendChild(preview);
-                
-                // 计算预览框位置
-                const rect = e.target.getBoundingClientRect();
-                const previewRect = preview.getBoundingClientRect();
-                const spaceRight = window.innerWidth - rect.right;
-                const spaceBottom = window.innerHeight - rect.bottom;
-                
-                // 调整位置，确保不超出视窗
-                let left = rect.right + 10;
-                let top = rect.top;
-                
-                if (spaceRight < previewRect.width + 10) {
-                    left = rect.left - previewRect.width - 10;
-                }
-                
-                if (spaceBottom < previewRect.height + 10) {
-                    top = rect.bottom - previewRect.height;
-                }
-                
-                preview.style.left = `${left}px`;
-                preview.style.top = `${top}px`;
-                preview.style.display = 'block';
-            });
-            
-            item.addEventListener('mouseleave', () => {
-                const preview = document.querySelector('.history-preview');
-                if (preview) {
-                    preview.remove();
-                }
-            });
-        });
-    }
-
-    loadFromHistory(jsonStr) {
-        try {
-            // 设置输入框的值
-            this.input.value = jsonStr;
-            
-            // 格式化 JSON，但不添加到历史记录
-            this.formatJSON(jsonStr, false);
-        } catch (e) {
-            this.showError('加载历史记录失败：' + e.message);
-        }
-    }
-
-    clearHistory() {
-        this.history = [];
-        localStorage.removeItem('jsonHistory');
-        this.renderHistory();
-    }
-
-    toggleHistory() {
-        const historyPanel = document.querySelector('.history-panel');
-        const mainContent = document.querySelector('.main-content');
-        const isCollapsed = historyPanel.classList.contains('collapsed');
-        
-        historyPanel.classList.toggle('collapsed');
-        mainContent.classList.toggle('history-visible');
-        
-        // 更新按钮文本
-        const showHistoryBtn = document.querySelector('.show-history');
-        if (showHistoryBtn) {
-            showHistoryBtn.textContent = isCollapsed ? '隐藏历史' : '显示历史';
-        }
-    }
-
-    initTheme() {
-        // 从本地存储获取主题设置
-        const savedTheme = localStorage.getItem('theme') || 'light';
-        document.documentElement.setAttribute('data-theme', savedTheme);
-        this.updateThemeIcon(savedTheme);
-    }
-
-    toggleTheme() {
-        const currentTheme = document.documentElement.getAttribute('data-theme');
-        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-        
-        // 更新主题
-        document.documentElement.setAttribute('data-theme', newTheme);
-        localStorage.setItem('theme', newTheme);
-        
-        // 更新图标
-        this.updateThemeIcon(newTheme);
-    }
-
-    updateThemeIcon(theme) {
-        const themeIcon = document.querySelector('.theme-icon');
-        if (themeIcon) {
-            themeIcon.textContent = theme === 'dark' ? '☀️' : '';
+            // 如果不是有效的JSON，直接复制文本
+            navigator.clipboard.writeText(text)
+                .then(() => {
+                    this.showToast('复制成功！', false);
+                })
+                .catch(err => {
+                    console.error('复制失败:', err);
+                    this.showToast('复制失败，请重试', true);
+                });
         }
     }
 }
@@ -648,4 +407,3 @@ function scrollToTop() {
 
 // 初始化 JSON 可视化工具
 const jsonVisualizer = new JSONVisualizer();
-
