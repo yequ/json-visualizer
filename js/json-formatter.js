@@ -506,20 +506,61 @@ class JSONVisualizer {
     }
 
     renderHistory() {
-        this.historyList.innerHTML = this.history.map(item => `
+        const historyList = document.getElementById('json-history');
+        historyList.innerHTML = this.history.map(item => `
             <div class="history-item" data-json='${this.escapeHtml(item.data)}'>
-                <span class="preview">${this.escapeHtml(item.preview)}</span>
-                <span class="time">${item.time}</span>
+                <div class="history-content">
+                    <span class="preview">${this.escapeHtml(item.preview)}</span>
+                    <span class="time">${item.time}</span>
+                </div>
             </div>
         `).join('');
 
-        // 添加点击事件监听
-        const historyItems = this.historyList.querySelectorAll('.history-item');
+        // 添加点击事件监听和悬浮预览功能
+        const historyItems = historyList.querySelectorAll('.history-item');
         historyItems.forEach(item => {
+            // 点击加载历史记录
             item.addEventListener('click', () => {
                 const jsonStr = item.dataset.json;
                 if (jsonStr) {
                     this.loadFromHistory(jsonStr);
+                }
+            });
+
+            // 添加悬浮预览功能
+            item.addEventListener('mouseenter', (e) => {
+                const preview = document.createElement('div');
+                preview.className = 'history-preview';
+                preview.innerHTML = `<pre>${this.escapeHtml(item.dataset.json)}</pre>`;
+                document.body.appendChild(preview);
+                
+                // 计算预览框位置
+                const rect = e.target.getBoundingClientRect();
+                const previewRect = preview.getBoundingClientRect();
+                const spaceRight = window.innerWidth - rect.right;
+                const spaceBottom = window.innerHeight - rect.bottom;
+                
+                // 调整位置，确保不超出视窗
+                let left = rect.right + 10;
+                let top = rect.top;
+                
+                if (spaceRight < previewRect.width + 10) {
+                    left = rect.left - previewRect.width - 10;
+                }
+                
+                if (spaceBottom < previewRect.height + 10) {
+                    top = rect.bottom - previewRect.height;
+                }
+                
+                preview.style.left = `${left}px`;
+                preview.style.top = `${top}px`;
+                preview.style.display = 'block';
+            });
+            
+            item.addEventListener('mouseleave', () => {
+                const preview = document.querySelector('.history-preview');
+                if (preview) {
+                    preview.remove();
                 }
             });
         });
@@ -527,17 +568,11 @@ class JSONVisualizer {
 
     loadFromHistory(jsonStr) {
         try {
-            // 解码 HTML 实体
-            const decodedStr = jsonStr.replace(/&quot;/g, '"')
-                                    .replace(/&lt;/g, '<')
-                                    .replace(/&gt;/g, '>')
-                                    .replace(/&amp;/g, '&');
-            
             // 设置输入框的值
-            this.input.value = decodedStr;
+            this.input.value = jsonStr;
             
             // 格式化 JSON，但不添加到历史记录
-            this.formatJSON(decodedStr, false);
+            this.formatJSON(jsonStr, false);
         } catch (e) {
             this.showError('加载历史记录失败：' + e.message);
         }
@@ -586,7 +621,7 @@ class JSONVisualizer {
     updateThemeIcon(theme) {
         const themeIcon = document.querySelector('.theme-icon');
         if (themeIcon) {
-            themeIcon.textContent = theme === 'dark' ? '☀️' : '��';
+            themeIcon.textContent = theme === 'dark' ? '☀️' : '';
         }
     }
 }
@@ -613,3 +648,4 @@ function scrollToTop() {
 
 // 初始化 JSON 可视化工具
 const jsonVisualizer = new JSONVisualizer();
+
