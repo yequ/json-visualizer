@@ -20,6 +20,8 @@ class JSONVisualizer {
         this.history = JSON.parse(localStorage.getItem('jsonHistory') || '[]');
         this.maxHistoryItems = 10;
         this.renderHistory();
+        // 初始化主题
+        this.initTheme();
     }
 
     initWorker() {
@@ -559,6 +561,32 @@ class JSONVisualizer {
         const showHistoryBtn = document.querySelector('.show-history');
         if (showHistoryBtn) {
             showHistoryBtn.textContent = isCollapsed ? '隐藏历史' : '显示历史';
+        }
+    }
+
+    initTheme() {
+        // 从本地存储获取主题设置
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        this.updateThemeIcon(savedTheme);
+    }
+
+    toggleTheme() {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        
+        // 更新主题
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+        
+        // 更新图标
+        this.updateThemeIcon(newTheme);
+    }
+
+    updateThemeIcon(theme) {
+        const themeIcon = document.querySelector('.theme-icon');
+        if (themeIcon) {
+            themeIcon.textContent = theme === 'dark' ? '☀️' : '��';
         }
     }
 }

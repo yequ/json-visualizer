@@ -73,6 +73,7 @@ body {
     flex: 1;
     display: flex;
     flex-direction: column;
+    position: relative;
 }
 
 /* 页面布局 */
@@ -383,9 +384,41 @@ button:active {
     transform: translateY(-2px);
 }
 
+/* 头部操作区域 */
+.header-actions {
+    display: none;
+}
+
 /* 主题切换按钮 */
 .theme-toggle {
-    display: none;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all var(--transition-duration) ease;
+    padding: 0;
+    margin-top: -2px;
+}
+
+.theme-toggle:hover {
+    background: var(--border);
+}
+
+.theme-icon {
+    width: 1.2rem;
+    height: 1.2rem;
+    stroke: var(--text);
+    transition: all var(--transition-duration) ease;
+}
+
+/* 暗色主题图标 */
+[data-theme="dark"] .theme-icon {
+    stroke: var(--text);
 }
 
 /* 回到顶部按钮 */

@@ -7,19 +7,21 @@
  */
 
 // 主题切换功能
+function initTheme() {
+    // 从本地存储获取主题设置，默认为 light
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    updateThemeIcon(savedTheme);
+}
+
 function toggleTheme() {
-    const html = document.documentElement;
-    const currentMode = html.getAttribute('data-theme-mode') || 'light';
+    const currentTheme = document.documentElement.getAttribute('data-theme');
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
     
-    // 在三种模式之间循环切换：light -> dark -> auto -> light
-    let newMode;
-    switch (currentMode) {
-        case 'light': newMode = 'dark'; break;
-        case 'dark': newMode = 'auto'; break;
-        default: newMode = 'light'; break;
-    }
-    
-    setTheme(newMode);
+    // 更新主题
+    document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+    updateThemeIcon(newTheme);
 }
 
 // 设置主题
@@ -30,23 +32,32 @@ function setTheme(mode) {
     html.setAttribute('data-theme', effectiveTheme);
     html.setAttribute('data-theme-mode', mode);
     localStorage.setItem('theme', mode);
-    updateThemeIcon(mode, effectiveTheme);
+    updateThemeIcon(effectiveTheme);
 }
 
 // 更新主题图标
-function updateThemeIcon(mode, effectiveTheme) {
-    const icon = document.querySelector('.theme-toggle svg');
-    if (!icon) return;
-    
-    if (mode === 'auto') {
-        // 自动模式图标（循环箭头）
-        icon.innerHTML = `<path d="M12 3a9 9 0 1 0 9 9h-1a8 8 0 1 1-8-8V3zm0 18a9 9 0 1 1-9-9h1a8 8 0 1 0 8 8v1z" fill="currentColor" stroke="none"/>`;
-    } else if (effectiveTheme === 'dark') {
-        // 暗色模式图标（月亮）
-        icon.innerHTML = `<path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" fill="currentColor" stroke="none"/>`;
-    } else {
-        // 亮色模式图标（太阳）
-        icon.innerHTML = `<path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0M12 3l0 1m0 16l0 1m9 -9l-1 0m-16 0l-1 0m15.5 -6.5l-0.7 0.7m-12.1 12.1l-0.7 0.7m12.1 -12.1l0.7 0.7m-12.1 12.1l0.7 0.7" fill="currentColor" stroke="none"/>`;
+function updateThemeIcon(theme) {
+    const icon = document.querySelector('.theme-icon');
+    if (icon) {
+        if (theme === 'dark') {
+            // 太阳图标 - 简单均匀设计
+            icon.innerHTML = `
+                <circle cx="12" cy="12" r="3.5"/>
+                <path d="
+                    M12 4v2
+                    M12 18v2
+                    M4 12H6
+                    M18 12h2
+                    M6.34 6.34l1.42 1.42
+                    M16.24 16.24l1.42 1.42
+                    M6.34 17.66l1.42-1.42
+                    M16.24 7.76l1.42-1.42
+                " stroke-linecap="round"/>
+            `;
+        } else {
+            // 月亮图标
+            icon.innerHTML = `<path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" stroke-width="1.5"/>`;
+        }
     }
 }
 
