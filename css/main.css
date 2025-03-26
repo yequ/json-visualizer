@@ -71,7 +71,124 @@ body {
     border: 1px solid var(--border);
     transition: all var(--transition-duration) var(--transition-timing);
     flex: 1;
-    margin-bottom: 2rem;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 页面布局 */
+.page-layout {
+    display: flex;
+    flex: 1;
+}
+
+/* 历史记录面板样式 */
+.history-panel {
+    width: 300px;
+    background: var(--container-bg);
+    border-right: 1px solid var(--border);
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 100;
+    transition: transform var(--transition-duration) ease;
+}
+
+.history-panel.collapsed {
+    transform: translateX(-100%);
+}
+
+.history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    padding-top: 1rem;
+}
+
+.history-actions {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.toggle-history {
+    padding: 0.25rem 0.5rem;
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+    font-size: 1.2rem;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.toggle-history:hover {
+    background: var(--border);
+}
+
+.show-history {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+}
+
+.show-history:hover {
+    background: var(--border);
+}
+
+.history-list {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.history-item {
+    padding: 0.5rem;
+    border: 1px solid var(--border);
+    border-radius: 0.25rem;
+    cursor: pointer;
+    transition: all var(--transition-duration) ease;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.history-item:hover {
+    background: var(--border);
+}
+
+.history-item .preview {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-right: 0.5rem;
+}
+
+.history-item .time {
+    font-size: 0.75rem;
+    color: var(--text);
+    opacity: 0.7;
+}
+
+/* 主内容区域 */
+.main-content {
+    flex: 1;
+    margin-left: 0;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    transition: margin-left var(--transition-duration) ease;
+}
+
+.main-content.history-visible {
+    margin-left: 300px;
 }
 
 /* 编辑器布局 */
@@ -96,7 +213,6 @@ textarea, pre {
     font-size: 0.875rem;
     line-height: 1.5;
     resize: none;
-    background: var(--container-bg);
     color: var(--text);
     transition: all var(--transition-duration) ease;
     margin: 0;
@@ -106,6 +222,7 @@ textarea, pre {
 /* 单独调整输入框样式 */
 textarea {
     padding: 1.2rem;
+    background: #ffffff;
 }
 
 /* 单独调整输出框样式 */ 
@@ -113,6 +230,7 @@ pre {
     overflow: auto;
     white-space: pre-wrap;
     word-wrap: break-word;
+    background: var(--background);
 }
 
 textarea:focus, pre:focus {
@@ -202,8 +320,9 @@ button:active {
     background: var(--container-bg);
     padding: 1.5rem 0;
     border-top: 1px solid var(--border);
-    margin-top: auto;
     box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+    margin-top: auto;
+    width: 100%;
 }
 
 .footer-content {
@@ -348,28 +467,45 @@ button:active {
 
 /* 响应式设计 */
 @media (max-width: 1600px) {
-    .container, .header-content, .footer-content {
-        max-width: 1400px;
+    .history-panel {
+        width: 250px;
+    }
+    .main-content.history-visible {
+        margin-left: 250px;
     }
 }
 
 @media (max-width: 1400px) {
-    .container, .header-content, .footer-content {
-        max-width: 1200px;
+    .history-panel {
+        width: 200px;
+    }
+    .main-content.history-visible {
+        margin-left: 200px;
+    }
+}
+
+@media (max-width: 1200px) {
+    .history-panel {
+        display: none;
+    }
+    .main-content {
+        margin-left: 0;
+    }
+    .show-history {
+        display: none;
     }
 }
 
 @media (max-width: 768px) {
+    .main-content {
+        padding: 1rem;
+    }
+    
     .boxes {
         grid-template-columns: 1fr;
         height: auto;
     }
     
-    .container {
-        padding: 1rem;
-        width: 100%;
-    }
-
     textarea, pre {
         height: 40vh;
     }
@@ -611,4 +747,74 @@ button:active {
         font-size: 0.75rem;
         min-width: 160px;
     }
+}
+
+/* 左侧面板样式 */
+.left-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    height: 100%;
+}
+
+/* 编辑器面板样式 */
+.editor-panel {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    height: 100%;
+}
+
+/* 调整输入框高度 */
+.left-panel textarea {
+    flex: 1;
+    height: calc(100% - 220px);
+}
+
+/* 响应式设计补充 */
+@media (max-width: 768px) {
+    .history-panel {
+        height: 150px;
+    }
+    
+    .left-panel textarea {
+        height: calc(100% - 170px);
+    }
+}
+
+/* JSON 查看器样式 */
+.json-viewer {
+    background: var(--background);
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin: 0;
+    font-family: 'Fira Code', monospace;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    overflow-x: auto;
+    overflow-y: auto;
+    max-height: 100%;
+    color: var(--text);
+    position: relative;
+    transition: all var(--transition-duration) ease;
+}
+
+/* 暗色主题 */
+[data-theme="dark"] .json-viewer,
+[data-theme="dark"] textarea {
+    background: var(--background);
+    border-color: var(--border);
+    color: var(--text);
+}
+
+[data-theme="dark"] textarea {
+    background: #ffffff;
+    color: var(--text);
+}
+
+[data-theme="dark"] pre {
+    background: var(--background);
 }

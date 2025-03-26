@@ -11,10 +11,15 @@ class JSONVisualizer {
     constructor() {
         this.input = document.getElementById('json-input');
         this.output = document.getElementById('json-output');
+        this.historyList = document.getElementById('json-history');
         this.initWorker();
         this.init();
         // 存储当前处理的JSON数据
         this.currentJsonData = null;
+        // 初始化历史记录
+        this.history = JSON.parse(localStorage.getItem('jsonHistory') || '[]');
+        this.maxHistoryItems = 10;
+        this.renderHistory();
     }
 
     initWorker() {
@@ -178,7 +183,7 @@ class JSONVisualizer {
         });
     }
 
-    formatJSON(jsonStr) {
+    formatJSON(jsonStr, addToHistory = true) {
         if (this.hasWorker) {
             // 使用 Web Worker 处理 JSON
             this.worker.postMessage({ action: 'format', data: jsonStr });
@@ -191,6 +196,11 @@ class JSONVisualizer {
                 this.output.innerHTML = formattedHTML;
                 this.output.className = '';
                 this.applyStyles();
+                
+                // 只有在需要时才添加到历史记录
+                if (addToHistory) {
+                    this.addToHistory(jsonStr);
+                }
             } catch (e) {
                 this.showError(`Invalid JSON: ${e.message}`);
             }
@@ -459,6 +469,97 @@ class JSONVisualizer {
         this.output.innerHTML = '';
         sessionStorage.removeItem('jsonData');
         this.currentJsonData = null;
+    }
+
+    addToHistory(jsonStr) {
+        // 移除重复项
+        this.history = this.history.filter(item => item.data !== jsonStr);
+        
+        // 添加到开头
+        this.history.unshift({
+            data: jsonStr,
+            time: new Date().toLocaleString(),
+            preview: this.getPreview(jsonStr)
+        });
+        
+        // 限制历史记录数量
+        if (this.history.length > this.maxHistoryItems) {
+            this.history.pop();
+        }
+        
+        // 保存到本地存储
+        localStorage.setItem('jsonHistory', JSON.stringify(this.history));
+        
+        // 更新显示
+        this.renderHistory();
+    }
+
+    getPreview(jsonStr) {
+        try {
+            const json = JSON.parse(jsonStr);
+            return JSON.stringify(json).slice(0, 50) + (JSON.stringify(json).length > 50 ? '...' : '');
+        } catch (e) {
+            return jsonStr.slice(0, 50) + (jsonStr.length > 50 ? '...' : '');
+        }
+    }
+
+    renderHistory() {
+        this.historyList.innerHTML = this.history.map(item => `
+            <div class="history-item" data-json='${this.escapeHtml(item.data)}'>
+                <span class="preview">${this.escapeHtml(item.preview)}</span>
+                <span class="time">${item.time}</span>
+            </div>
+        `).join('');
+
+        // 添加点击事件监听
+        const historyItems = this.historyList.querySelectorAll('.history-item');
+        historyItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const jsonStr = item.dataset.json;
+                if (jsonStr) {
+                    this.loadFromHistory(jsonStr);
+                }
+            });
+        });
+    }
+
+    loadFromHistory(jsonStr) {
+        try {
+            // 解码 HTML 实体
+            const decodedStr = jsonStr.replace(/&quot;/g, '"')
+                                    .replace(/&lt;/g, '<')
+                                    .replace(/&gt;/g, '>')
+                                    .replace(/&amp;/g, '&');
+            
+            // 设置输入框的值
+            this.input.value = decodedStr;
+            
+            // 格式化 JSON，但不添加到历史记录
+            this.formatJSON(decodedStr, false);
+        } catch (e) {
+            this.showError('加载历史记录失败：' + e.message);
+        }
+    }
+
+    clearHistory() {
+        this.history = [];
+        localStorage.removeItem('jsonHistory');
+        this.renderHistory();
+    }
+
+    toggleHistory() {
+        const historyPanel = document.querySelector('.history-panel');
+        const mainContent = document.querySelector('.main-content');
+        const isCollapsed = historyPanel.classList.contains('collapsed');
+        
+        historyPanel.classList.toggle('collapsed');
+        mainContent.classList.toggle('history-visible');
+        
+        // 更新按钮文本
+        const showHistoryBtn = document.querySelector('.show-history');
+        if (showHistoryBtn) {
+            showHistoryBtn.textContent = isCollapsed ? '隐藏历史' : '显示历史';
+        }
     }
 }
 
