@@ -45,16 +45,7 @@ git clone https://github.com/yequ/json-visualizer.git
 cd json-visualizer
 \`\`\`
 
-2. Open `index.html` in your browser or serve it using a local server:
-\`\`\`bash
-# Using Python
-python -m http.server 8000
-
-# Using Node.js
-npx serve .
-\`\`\`
-
-3. Navigate to `http://localhost:8000` in your browser.
+2. Open `index.html` directly in your browser.
 
 ### 🛠️ Usage
 
@@ -109,16 +100,7 @@ git clone https://github.com/yequ/json-visualizer.git
 cd json-visualizer
 \`\`\`
 
-2. 在浏览器中打开 `index.html` 或使用本地服务器：
-\`\`\`bash
-# 使用 Python
-python -m http.server 8000
-
-# 使用 Node.js
-npx serve .
-\`\`\`
-
-3. 在浏览器中访问 `http://localhost:8000`。
+2. 直接在浏览器中打开 `index.html` 文件。
 
 ### 🛠️ 使用方法
 
