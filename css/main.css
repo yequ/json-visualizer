@@ -934,3 +934,213 @@ pre {
 [data-theme="dark"] .copy-btn {
     color: #e5e7eb;
 }
+
+/* Base64工具样式 */
+.tool-tabs {
+    display: flex;
+    margin-bottom: 20px;
+    border-bottom: 2px solid var(--border);
+}
+
+.tab-button {
+    padding: 12px 24px;
+    border: none;
+    background: transparent;
+    color: var(--text);
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s ease;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.tab-button:hover {
+    background-color: rgba(76, 175, 80, 0.1);
+    transform: none;
+    box-shadow: none;
+}
+
+.tab-button.active {
+    color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+    background-color: rgba(76, 175, 80, 0.05);
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* 文件上传区域样式 */
+.file-upload-section {
+    margin-bottom: 20px;
+}
+
+.upload-area {
+    border: 2px dashed var(--border);
+    border-radius: 12px;
+    padding: 40px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background-color: var(--lazy-load-bg);
+}
+
+.upload-area:hover {
+    border-color: var(--primary-color);
+    background-color: rgba(76, 175, 80, 0.05);
+}
+
+.upload-area.drag-over {
+    border-color: var(--primary-color);
+    background-color: rgba(76, 175, 80, 0.1);
+    transform: scale(1.02);
+}
+
+.upload-content svg {
+    color: var(--primary-color);
+    margin-bottom: 16px;
+}
+
+.upload-content p {
+    margin: 8px 0;
+    color: var(--text);
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.upload-hint {
+    font-size: 14px !important;
+    color: rgba(var(--text), 0.7) !important;
+    font-weight: 400 !important;
+}
+
+/* 文件信息样式 */
+.file-info {
+    background-color: var(--lazy-load-bg);
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 20px;
+    border-left: 4px solid var(--primary-color);
+}
+
+.file-info h3 {
+    margin: 0 0 12px 0;
+    color: var(--primary-color);
+    font-size: 18px;
+}
+
+.file-info p {
+    margin: 8px 0;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.file-info strong {
+    color: var(--text);
+    font-weight: 600;
+}
+
+/* 图片预览样式 */
+#image-preview {
+    background-color: var(--lazy-load-bg);
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 16px;
+    text-align: center;
+}
+
+#image-preview h3 {
+    margin: 0 0 16px 0;
+    color: var(--primary-color);
+    font-size: 18px;
+}
+
+#preview-image {
+    max-width: 100%;
+    max-height: 300px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border: 2px solid var(--border);
+}
+
+/* 文件输出区域样式 */
+#file-output {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+#file-base64-output {
+    flex: 1;
+    margin: 0;
+    padding: 16px;
+    background-color: var(--lazy-load-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-family: 'Fira Code', monospace;
+    font-size: 13px;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    word-break: break-all;
+    overflow-y: auto;
+    min-height: 200px;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .tool-tabs {
+        flex-direction: column;
+    }
+
+    .tab-button {
+        border-bottom: none;
+        border-right: 3px solid transparent;
+        text-align: left;
+    }
+
+    .tab-button.active {
+        border-bottom: none;
+        border-right-color: var(--primary-color);
+    }
+
+    .upload-area {
+        padding: 30px 15px;
+    }
+
+    .upload-content p {
+        font-size: 14px;
+    }
+
+    .file-info {
+        padding: 12px;
+    }
+
+    #image-preview {
+        padding: 12px;
+    }
+
+    #preview-image {
+        max-height: 200px;
+    }
+}
+
+/* 暗色主题下的特殊样式 */
+[data-theme="dark"] .upload-area {
+    border-color: var(--border-dark);
+}
+
+[data-theme="dark"] .upload-area:hover {
+    border-color: var(--primary-color);
+}
+
+[data-theme="dark"] .upload-hint {
+    color: rgba(229, 231, 235, 0.7) !important;
+}
+
+[data-theme="dark"] #preview-image {
+    border-color: var(--border-dark);
+}
