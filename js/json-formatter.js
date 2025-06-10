@@ -25,8 +25,13 @@ class JSONVisualizer {
                 this.worker.onmessage = (e) => {
                     if (e.data.error) {
                         this.showError(e.data.error);
+                        this.hideDataStats();
                     } else {
                         this.renderJSON(e.data.result);
+                        // 在Worker处理完成后计算统计信息
+                        if (this.currentOriginalJson && this.currentJsonData) {
+                            this.updateDataStats(this.currentOriginalJson, this.currentJsonData);
+                        }
                     }
                 };
                 this.hasWorker = true;
@@ -180,6 +185,14 @@ class JSONVisualizer {
 
     formatJSON(jsonStr) {
         if (this.hasWorker) {
+            // 保存原始JSON字符串用于统计计算
+            this.currentOriginalJson = jsonStr;
+            try {
+                // 先解析JSON以保存解析后的数据
+                this.currentJsonData = JSON.parse(jsonStr);
+            } catch (e) {
+                this.currentJsonData = null;
+            }
             // 使用 Web Worker 处理 JSON
             this.worker.postMessage({ action: 'format', data: jsonStr });
         } else {
@@ -191,10 +204,47 @@ class JSONVisualizer {
                 this.output.innerHTML = formattedHTML;
                 this.output.className = '';
                 this.applyStyles();
+                // 计算并显示数据大小统计
+                this.updateDataStats(jsonStr, json);
             } catch (e) {
                 this.showError(`Invalid JSON: ${e.message}`);
+                this.hideDataStats();
             }
         }
+    }
+
+    // 计算字符串的字节大小
+    getByteSize(str) {
+        return new Blob([str]).size;
+    }
+
+    // 格式化文件大小显示
+    formatFileSize(bytes) {
+        if (bytes === 0) return '0 B';
+        const k = 1024;
+        const sizes = ['B', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+
+    // 更新数据统计信息
+    updateDataStats(originalJson, parsedJson) {
+        const sizeIndicator = document.getElementById('size-indicator');
+
+        // 计算原始数据大小
+        const originalSize = this.getByteSize(originalJson);
+
+        // 更新显示
+        document.getElementById('original-size').textContent = this.formatFileSize(originalSize);
+
+        // 显示大小指示器
+        sizeIndicator.style.display = 'flex';
+    }
+
+    // 隐藏数据统计信息
+    hideDataStats() {
+        const sizeIndicator = document.getElementById('size-indicator');
+        sizeIndicator.style.display = 'none';
     }
 
     renderJSONToHTML(data, level = 0) {

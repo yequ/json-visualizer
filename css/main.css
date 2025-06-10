@@ -308,6 +308,58 @@ pre {
     background-color: var(--primary-active);
 }
 
+/* 数据大小指示器样式 */
+.size-indicator {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    background: rgba(76, 175, 80, 0.1);
+    border: 1px solid rgba(76, 175, 80, 0.2);
+    border-radius: 4px;
+    margin-left: auto;
+    transition: all 0.2s ease;
+}
+
+.size-indicator:hover {
+    background: rgba(76, 175, 80, 0.15);
+    transform: translateY(-1px);
+}
+
+.size-text {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--primary-color);
+    font-family: 'Fira Code', monospace;
+}
+
+/* 暗色主题下的数据大小指示器样式 */
+[data-theme="dark"] .size-indicator {
+    background: rgba(99, 102, 241, 0.15);
+    border-color: rgba(99, 102, 241, 0.3);
+}
+
+[data-theme="dark"] .size-indicator:hover {
+    background: rgba(99, 102, 241, 0.2);
+}
+
+[data-theme="dark"] .size-text {
+    color: #6366f1;
+}
+
+/* 响应式设计 - 数据大小指示器 */
+@media (max-width: 768px) {
+    .size-indicator {
+        margin-left: 0;
+        margin-top: 8px;
+        width: 100%;
+        justify-content: center;
+    }
+
+    .size-text {
+        font-size: 12px;
+    }
+}
+
 /* 暗色主题样式 */
 [data-theme="dark"] textarea,
 [data-theme="dark"] pre {
