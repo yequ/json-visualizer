@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数据压缩解压工具 - JSON可视化工具</title>
+    <meta name="description" content="在线数据压缩解压工具，支持gzip、deflate等多种压缩算法，可压缩文本、JSON等数据。">
+    <meta name="keywords" content="数据压缩,gzip压缩,deflate压缩,在线压缩工具,数据解压">
+    <link href="../css/main.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+<header class="header">
+    <div class="header-content">
+        <a href="../index.html" class="logo">JSON 可视化工具</a>
+        <nav class="nav-links">
+            <a href="../index.html" class="nav-link">JSON格式化</a>
+            <a href="url.html" class="nav-link">URL编解码</a>
+            <a href="time.html" class="nav-link">时间戳转换</a>
+            <a href="password.html" class="nav-link">随机密码</a>
+            <a href="base64.html" class="nav-link">Base64编解码</a>
+            <a href="compress.html" class="nav-link active">压缩解压</a>
+            <button class="theme-toggle" onclick="toggleTheme()" title="切换主题">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0M12 3l0 1m0 16l0 1m9 -9l-1 0m-16 0l-1 0m15.5 -6.5l-0.7 0.7m-12.1 12.1l-0.7 0.7m12.1 -12.1l0.7 0.7m-12.1 12.1l0.7 0.7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+                </svg>
+            </button>
+        </nav>
+    </div>
+</header>
+
+<div class="container">
+    <div class="tool-header">
+        <h1>数据压缩解压工具</h1>
+        <p>支持多种压缩算法，可以压缩和解压文本数据</p>
+    </div>
+
+    <div class="compress-tool">
+        <!-- 压缩算法选择 -->
+        <div class="algorithm-selector">
+            <label for="algorithm">压缩算法：</label>
+            <select id="algorithm">
+                <option value="gzip">Gzip</option>
+                <option value="deflate">Deflate</option>
+                <option value="lz-string">LZ-String</option>
+            </select>
+        </div>
+
+        <!-- 操作按钮 -->
+        <div class="button-group">
+            <button onclick="compressData()" class="primary-btn">压缩数据</button>
+            <button onclick="decompressData()" class="secondary-btn">解压数据</button>
+            <button onclick="clearAll()">清空</button>
+            <button onclick="swapContent()">交换内容</button>
+        </div>
+
+        <!-- 输入输出区域 -->
+        <div class="io-container">
+            <div class="input-section">
+                <div class="section-header">
+                    <h3>原始数据</h3>
+                    <div class="size-info">
+                        <span id="input-size">0 字节</span>
+                    </div>
+                </div>
+                <textarea id="input-data" placeholder="请输入要压缩的数据..."></textarea>
+                <div class="file-upload">
+                    <input type="file" id="file-input" accept=".txt,.json,.xml,.csv" style="display: none;">
+                    <button onclick="document.getElementById('file-input').click()">选择文件</button>
+                </div>
+            </div>
+
+            <div class="output-section">
+                <div class="section-header">
+                    <h3>处理结果</h3>
+                    <div class="size-info">
+                        <span id="output-size">0 字节</span>
+                        <span id="compression-ratio" style="margin-left: 10px;"></span>
+                    </div>
+                </div>
+                <textarea id="output-data" placeholder="处理结果将显示在这里..." readonly></textarea>
+                <div class="output-actions">
+                    <button onclick="copyResult()">复制结果</button>
+                    <button onclick="downloadResult()">下载结果</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 压缩统计信息 -->
+        <div class="stats-panel" id="stats-panel" style="display: none;">
+            <h4>压缩统计</h4>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <span class="stat-label">原始大小：</span>
+                    <span class="stat-value" id="stat-original">0 字节</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">压缩后大小：</span>
+                    <span class="stat-value" id="stat-compressed">0 字节</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">压缩率：</span>
+                    <span class="stat-value" id="stat-ratio">0%</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">节省空间：</span>
+                    <span class="stat-value" id="stat-saved">0 字节</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="footer">
+    <div class="footer-content">
+        <div class="footer-info">
+            2025 JSON可视化工具 - 让数据处理更简单
+        </div>
+        <div class="footer-links">
+            <a href="https://github.com/yequ/json-visualizer" class="footer-link" target="_blank">GitHub</a>
+        </div>
+    </div>
+</footer>
+
+<button class="back-to-top" onclick="scrollToTop()" title="回到顶部">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M18 15l-6-6-6 6"/>
+    </svg>
+</button>
+
+<script src="../js/theme.js"></script>
+<script src="../js/compress-tool.js"></script>
+</body>
+</html>

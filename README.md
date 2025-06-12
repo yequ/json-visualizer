@@ -20,6 +20,7 @@ A powerful, lightweight, and user-friendly JSON visualization tool that helps de
   - 🔄 Timestamp Converter
   - 🔗 URL Encoder/Decoder
   - 🔐 Base64 Encoder/Decoder
+  - 📦 Data Compression/Decompression (Gzip, Deflate, LZ-String)
   - 🎨 Dark/Light Theme Toggle
 - **Advanced JSON Operations**:
   - 🔄 JSON Escape/Unescape
@@ -75,6 +76,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
   - 🔄 时间戳转换器
   - 🔗 URL 编码/解码器
   - 🔐 Base64 编码/解码器
+  - 📦 数据压缩/解压 (Gzip, Deflate, LZ-String)
   - 🎨 深色/浅色主题切换
 - **高级 JSON 操作**：
   - 🔄 JSON 转义/反转义
