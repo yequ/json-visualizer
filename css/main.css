@@ -176,7 +176,7 @@ button:active {
 .password-display input {
     width: 100%;
     padding: 12px 16px;
-    font-family: 'Fira Code', monospace;
+    font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Source Code Pro', 'Menlo', 'Consolas', monospace;
     font-size: 16px;
     border: 1px solid var(--border);
     border-radius: 4px;
@@ -218,7 +218,7 @@ textarea {
     padding: 16px;
     border: 1px solid var(--border);
     border-radius: 4px;
-    font-family: 'Fira Code', monospace;
+    font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Source Code Pro', 'Menlo', 'Consolas', monospace;
     font-size: 14px;
     line-height: 1.5;
     resize: none;
@@ -249,7 +249,7 @@ pre {
     margin: 0;
     border: 1px solid var(--border);
     border-radius: 4px;
-    font-family: 'Fira Code', monospace;
+    font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Source Code Pro', 'Menlo', 'Consolas', monospace;
     font-size: 14px;
     line-height: 1.5;
     overflow-x: auto;
@@ -266,7 +266,7 @@ pre {
 /* 错误提示样式 */
 .error {
     color: var(--error-color);
-    font-family: 'Fira Code', monospace;
+    font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Source Code Pro', 'Menlo', 'Consolas', monospace;
     font-size: 14px;
     line-height: 1.5;
     padding: 16px;
@@ -329,7 +329,7 @@ pre {
     font-size: 13px;
     font-weight: 600;
     color: var(--primary-color);
-    font-family: 'Fira Code', monospace;
+    font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Source Code Pro', 'Menlo', 'Consolas', monospace;
 }
 
 /* 暗色主题下的数据大小指示器样式 */
@@ -1133,7 +1133,7 @@ pre {
     background-color: var(--lazy-load-bg);
     border: 1px solid var(--border);
     border-radius: 8px;
-    font-family: 'Fira Code', monospace;
+    font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Source Code Pro', 'Menlo', 'Consolas', monospace;
     font-size: 13px;
     line-height: 1.5;
     white-space: pre-wrap;
@@ -1291,7 +1291,7 @@ pre {
     gap: 8px;
     font-size: 13px;
     color: var(--primary-color);
-    font-family: 'Fira Code', monospace;
+    font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Source Code Pro', 'Menlo', 'Consolas', monospace;
     font-weight: 500;
 }
 
@@ -1389,7 +1389,7 @@ pre {
 }
 
 .stat-value {
-    font-family: 'Fira Code', monospace;
+    font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Source Code Pro', 'Menlo', 'Consolas', monospace;
     font-weight: 600;
     color: var(--primary-color);
     font-size: 14px;
