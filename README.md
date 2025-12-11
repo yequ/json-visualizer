@@ -36,7 +36,7 @@ A powerful, lightweight, and user-friendly JSON visualization tool that helps de
 
 ### 🚀 Quick Start
 
-Simply visit [https://yequ.github.io/json-visualizer](https://yequ.github.io/json-visualizer) to start using JSON Visualizer online.
+Simply visit [https://json.red](https://json.red) to start using JSON Visualizer online.
 
 #### Local Development
 
@@ -92,7 +92,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ### 🚀 快速开始
 
-直接访问 [https://yequ.github.io/json-visualizer](https://yequ.github.io/json-visualizer) 即可在线使用 JSON Visualizer。
+直接访问 [https://json.red](https://json.red) 即可在线使用 JSON Visualizer。
 
 #### 本地开发
 
