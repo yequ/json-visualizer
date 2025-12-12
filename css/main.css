@@ -1,10 +1,10 @@
 /* 全局样式 */
 :root {
     /* 亮色主题变量 */
-    --primary-color: #10b981; /* 更现代的绿色 */
-    --primary-hover: #059669;
-    --primary-active: #047857;
-    --primary-light: rgba(16, 185, 129, 0.1);
+    --primary-color: #ef4444; /* Red 500 */
+    --primary-hover: #dc2626; /* Red 600 */
+    --primary-active: #b91c1c; /* Red 700 */
+    --primary-light: rgba(239, 68, 68, 0.1);
     
     --background: #f3f4f6; /* 浅灰背景 */
     --container-bg: #ffffff;
@@ -43,10 +43,10 @@
 
 [data-theme="dark"] {
     /* 暗色主题变量 */
-    --primary-color: #34d399;
-    --primary-hover: #10b981;
-    --primary-active: #059669;
-    --primary-light: rgba(52, 211, 153, 0.1);
+    --primary-color: #f87171; /* Red 400 */
+    --primary-hover: #ef4444; /* Red 500 */
+    --primary-active: #dc2626; /* Red 600 */
+    --primary-light: rgba(248, 113, 113, 0.1);
     
     --background: #111827;
     --container-bg: #1f2937;
