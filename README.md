@@ -92,7 +92,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ### 🚀 快速开始
 
-直接访问 [https://json.red](https://json.red) 即可在线使用 JSON Visualizer。
+直接访问 [http://json.red](http://json.red) 即可在线使用 JSON Visualizer。
 
 #### 本地开发
 
