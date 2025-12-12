@@ -36,7 +36,7 @@ A powerful, lightweight, and user-friendly JSON visualization tool that helps de
 
 ### 🚀 Quick Start
 
-Simply visit [https://json.red](https://json.red) to start using JSON Visualizer online.
+Simply visit [http://json.red](http://json.red) to start using JSON Visualizer online.
 
 #### Local Development
 
