@@ -305,6 +305,89 @@ class JSONVisualizer {
         this.applyStyles();
     }
 
+    // 复制格式化后的JSON
+    copyFormattedJSON() {
+        if (!this.currentJsonData) {
+            this.showToast('没有可复制的内容', 'error');
+            return;
+        }
+
+        try {
+            // 将JSON对象格式化为字符串（带缩进）
+            const formattedJson = JSON.stringify(this.currentJsonData, null, 2);
+            
+            // 复制到剪贴板
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(formattedJson).then(() => {
+                    this.showCopySuccess();
+                }).catch(err => {
+                    console.error('复制失败:', err);
+                    this.fallbackCopy(formattedJson);
+                });
+            } else {
+                this.fallbackCopy(formattedJson);
+            }
+        } catch (e) {
+            this.showToast('复制失败', 'error');
+            console.error('复制错误:', e);
+        }
+    }
+
+    // 显示复制成功状态
+    showCopySuccess() {
+        const btn = document.querySelector('.copy-output-btn');
+        const span = btn.querySelector('span');
+        const originalText = span.textContent;
+        
+        btn.classList.add('copied');
+        span.textContent = '已复制';
+        
+        setTimeout(() => {
+            btn.classList.remove('copied');
+            span.textContent = originalText;
+        }, 2000);
+        
+        this.showToast('已复制到剪贴板');
+    }
+
+    // 备用复制方法（使用 textarea）
+    fallbackCopy(text) {
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        document.body.appendChild(textarea);
+        textarea.select();
+        
+        try {
+            document.execCommand('copy');
+            this.showCopySuccess();
+        } catch (err) {
+            console.error('备用复制方法失败:', err);
+            this.showToast('复制失败', 'error');
+        }
+        
+        document.body.removeChild(textarea);
+    }
+
+    // 显示提示消息
+    showToast(message, type = 'success') {
+        // 移除已存在的 toast
+        const existingToast = document.querySelector('.toast');
+        if (existingToast) {
+            existingToast.remove();
+        }
+
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        toast.textContent = message;
+        document.body.appendChild(toast);
+
+        setTimeout(() => {
+            toast.remove();
+        }, 2000);
+    }
+
     escapeHtml(str) {
         const div = document.createElement('div');
         div.textContent = str;
