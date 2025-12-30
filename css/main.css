@@ -230,7 +230,7 @@ button:active {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1.5rem;
-    height: 650px;
+    min-height: 650px;
 }
 
 /* 输出区域包装器 */
@@ -239,6 +239,7 @@ button:active {
     height: 100%;
     display: flex;
     flex-direction: column;
+    min-height: 0; /* 修复 flex 子项溢出问题 */
 }
 
 /* 复制按钮 */
@@ -288,6 +289,7 @@ button:active {
 .output-wrapper .virtual-scroll-viewport {
     flex: 1;
     height: 100%;
+    min-height: 0; /* 修复 flex 子项溢出问题 */
 }
 
 textarea, pre {
