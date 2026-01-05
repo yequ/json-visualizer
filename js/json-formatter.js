@@ -478,6 +478,138 @@ class JSONVisualizer {
         }
     }
 
+    convertToYAML() {
+        try {
+            if (typeof jsyaml === 'undefined') {
+                this.showToast('YAML库未加载', true);
+                return;
+            }
+
+            const inputValue = this.input.value.trim();
+            if (!inputValue) {
+                this.showToast('请输入内容', true);
+                return;
+            }
+
+            // 尝试解析为 JSON
+            let isJSON = false;
+            try {
+                JSON.parse(inputValue);
+                isJSON = true;
+            } catch (e) {
+                // 不是有效的 JSON，可能是 YAML
+            }
+
+            if (isJSON) {
+                // JSON 转 YAML
+                const json = JSON.parse(inputValue);
+                const yamlStr = jsyaml.dump(json, {
+                    indent: 2,
+                    lineWidth: -1,
+                    noRefs: true
+                });
+                this.input.value = yamlStr;
+                // 显示 YAML 预览
+                const yamlHTML = this.renderYAMLToHTML(yamlStr);
+                this.output.innerHTML = yamlHTML;
+                this.output.classList.remove('error');
+                this.hideDataStats();
+                // 保存到会话存储
+                sessionStorage.setItem('jsonData', yamlStr);
+                this.showToast('已转换为 YAML 格式');
+            } else {
+                // YAML 转 JSON
+                try {
+                    const jsonObj = jsyaml.load(inputValue);
+                    const jsonStr = JSON.stringify(jsonObj, null, 2);
+                    this.input.value = jsonStr;
+                    // 保存到会话存储
+                    sessionStorage.setItem('jsonData', jsonStr);
+                    // 格式化显示 JSON
+                    this.formatJSON(jsonStr);
+                    this.showToast('已转换为 JSON 格式');
+                } catch (yamlError) {
+                    this.showError('转换失败: 输入内容既不是有效的 JSON 也不是有效的 YAML');
+                }
+            }
+        } catch (e) {
+            this.showError('转换失败: ' + e.message);
+        }
+    }
+
+    renderYAMLToHTML(yamlStr) {
+        const lines = yamlStr.split('\n');
+        let html = '';
+
+        lines.forEach(line => {
+            if (!line.trim()) {
+                html += '\n';
+                return;
+            }
+
+            // 匹配键值对
+            const keyValueMatch = line.match(/^(\s*)([^:]+):\s*(.*)$/);
+            if (keyValueMatch) {
+                const indent = keyValueMatch[1];
+                const key = keyValueMatch[2];
+                const value = keyValueMatch[3];
+
+                if (value) {
+                    // 有值的情况
+                    html += `${indent}<span class="yaml-key">${this.escapeHtml(key)}</span>: ${this.highlightYAMLValue(value)}\n`;
+                } else {
+                    // 只有键的情况（对象或数组的开始）
+                    html += `${indent}<span class="yaml-key">${this.escapeHtml(key)}</span>:\n`;
+                }
+            }
+            // 匹配数组项
+            else if (line.match(/^\s*-\s+/)) {
+                const match = line.match(/^(\s*)-\s+(.*)$/);
+                const indent = match[1];
+                const value = match[2];
+                html += `${indent}<span class="yaml-dash">-</span> ${this.highlightYAMLValue(value)}\n`;
+            }
+            // 匹配注释
+            else if (line.match(/^\s*#/)) {
+                html += `<span class="yaml-comment">${this.escapeHtml(line)}</span>\n`;
+            }
+            // 其他行
+            else {
+                html += `${this.escapeHtml(line)}\n`;
+            }
+        });
+
+        return html;
+    }
+
+    highlightYAMLValue(value) {
+        value = value.trim();
+
+        // 字符串（带引号）
+        if ((value.startsWith('"') && value.endsWith('"')) ||
+            (value.startsWith("'") && value.endsWith("'"))) {
+            return `<span class="yaml-string">${this.escapeHtml(value)}</span>`;
+        }
+
+        // 布尔值
+        if (value === 'true' || value === 'false') {
+            return `<span class="yaml-boolean">${value}</span>`;
+        }
+
+        // null
+        if (value === 'null' || value === '~') {
+            return `<span class="yaml-null">${value}</span>`;
+        }
+
+        // 数字
+        if (/^-?\d+\.?\d*$/.test(value)) {
+            return `<span class="yaml-number">${value}</span>`;
+        }
+
+        // 默认为字符串
+        return `<span class="yaml-string">${this.escapeHtml(value)}</span>`;
+    }
+
     showError(message) {
         this.output.innerHTML = `<span class="error">${message}</span>`;
         this.output.classList.add('error');

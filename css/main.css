@@ -328,6 +328,24 @@ pre {
 .null { color: var(--code-null); }
 .key { color: var(--code-key); }
 
+/* YAML 格式化颜色 */
+.yaml-key {
+    color: var(--code-key);
+    font-weight: 600;
+}
+.yaml-string { color: var(--code-string); }
+.yaml-number { color: var(--code-number); }
+.yaml-boolean { color: var(--code-boolean); }
+.yaml-null { color: var(--code-null); }
+.yaml-dash {
+    color: var(--text-muted);
+    font-weight: bold;
+}
+.yaml-comment {
+    color: var(--text-muted);
+    font-style: italic;
+}
+
 /* 页脚 */
 .footer {
     margin-top: 2rem;
