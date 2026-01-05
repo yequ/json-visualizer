@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cron表达式生成器 - JSON可视化工具</title>
+    <meta name="description" content="在线Cron表达式生成器，可视化编辑Cron表达式，支持Linux Crontab和Quartz格式。">
+    <meta name="keywords" content="Cron表达式,Cron生成器,Crontab,定时任务">
+    <meta name="author" content="yequ">
+    <link href="../css/main.css" rel="stylesheet">
+    <style>
+        .cron-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+        }
+        .cron-tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 15px;
+        }
+        .cron-tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            color: var(--text-secondary);
+        }
+        .cron-tab.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+        }
+        .cron-content {
+            display: none;
+            padding: 10px;
+            /* background: var(--bg-secondary); */ /* Removed background */
+            border-radius: 8px;
+        }
+        .cron-content.active {
+            display: block;
+        }
+        .cron-option {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .cron-checkboxes {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+            padding-left: 20px;
+        }
+        .cron-result {
+            font-family: monospace;
+            font-size: 1.2em;
+            padding: 15px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        #cron-expression {
+            background: var(--lazy-load-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            color: var(--primary-color);
+            font-family: var(--font-mono);
+            font-size: 1.2em;
+            font-weight: bold;
+            width: 100%;
+            outline: none;
+            padding: 12px 16px;
+            transition: all 0.2s ease;
+        }
+        #cron-expression:focus {
+            background-color: var(--container-bg);
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px var(--primary-light);
+        }
+        .next-runs {
+            margin-top: 20px;
+            padding: 15px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color); /* Added border */
+            border-radius: 8px;
+        }
+        .next-runs h3 {
+            margin-top: 0;
+            font-size: 1em;
+            color: var(--text-primary);
+            border-bottom: 1px solid var(--border-color); /* Added separator */
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+        }
+        .next-runs ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            color: var(--text-secondary);
+            font-family: monospace;
+        }
+        input[type="number"] {
+            width: 60px;
+            padding: 4px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+        }
+    </style>
+</head>
+<body>
+<header class="header">
+    <div class="header-content">
+        <a href="../index.html" class="logo">JSON 可视化工具</a>
+        <nav class="nav-links">
+            <a href="../index.html" class="nav-link">JSON格式化</a>
+            <a href="url.html" class="nav-link">URL编解码</a>
+            <a href="time.html" class="nav-link">时间戳转换</a>
+            <a href="password.html" class="nav-link">随机密码</a>
+            <a href="base64.html" class="nav-link">Base64编解码</a>
+            <a href="compress.html" class="nav-link">压缩解压</a>
+            <a href="cron.html" class="nav-link active">Cron表达式</a>
+            <button class="theme-toggle" onclick="toggleTheme()" title="切换主题">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0M12 3l0 1m0 16l0 1m9 -9l-1 0m-16 0l-1 0m15.5 -6.5l-0.7 0.7m-12.1 12.1l-0.7 0.7m12.1 -12.1l0.7 0.7m-12.1 12.1l0.7 0.7m-12.1 12.1l0.7 0.7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+                </svg>
+            </button>
+        </nav>
+    </div>
+</header>
+
+<div class="container">
+    <div class="cron-result">
+        <input type="text" id="cron-expression" value="* * * * * *" oninput="handleExpressionInput()">
+        <button class="copy-output-btn" onclick="copyCron()" title="复制">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+        </button>
+    </div>
+
+    <div class="cron-container">
+        <div class="cron-tabs">
+            <div class="cron-tab active" onclick="switchTab('second')">秒</div>
+            <div class="cron-tab" onclick="switchTab('minute')">分钟</div>
+            <div class="cron-tab" onclick="switchTab('hour')">小时</div>
+            <div class="cron-tab" onclick="switchTab('day')">日期</div>
+            <div class="cron-tab" onclick="switchTab('month')">月份</div>
+            <div class="cron-tab" onclick="switchTab('week')">星期</div>
+        </div>
+
+        <!-- 秒 -->
+        <div id="tab-second" class="cron-content active">
+            <div class="cron-option">
+                <input type="radio" name="second" value="*" checked onchange="updateCron()">
+                <label>每秒</label>
+            </div>
+            <div class="cron-option">
+                <input type="radio" name="second" value="range" onchange="updateCron()">
+                <label>周期：从 <input type="number" id="second-start" min="0" max="59" value="0" onchange="onInputTypeChange('second', 'range')"> 到 <input type="number" id="second-end" min="0" max="59" value="59" onchange="onInputTypeChange('second', 'range')"> 秒</label>
+            </div>
+            <div class="cron-option">
+                <input type="radio" name="second" value="interval" onchange="updateCron()">
+                <label>循环：从 <input type="number" id="second-from" min="0" max="59" value="0" onchange="onInputTypeChange('second', 'interval')"> 秒开始，每 <input type="number" id="second-step" min="1" max="59" value="1" onchange="onInputTypeChange('second', 'interval')"> 秒执行一次</label>
+            </div>
+            <div class="cron-option">
+                <input type="radio" name="second" value="specific" onchange="updateCron()">
+                <label>指定：</label>
+            </div>
+            <div class="cron-checkboxes" id="second-checkboxes">
+                <!-- JS will populate this -->
+            </div>
+        </div>
+
+        <!-- 分钟 -->
+        <div id="tab-minute" class="cron-content">
+            <div class="cron-option">
+                <input type="radio" name="minute" value="*" checked onchange="updateCron()">
+                <label>每分钟</label>
+            </div>
+            <div class="cron-option">
+                <input type="radio" name="minute" value="range" onchange="updateCron()">
+                <label>周期：从 <input type="number" id="min-start" min="0" max="59" value="0" onchange="onInputTypeChange('minute', 'range')"> 到 <input type="number" id="min-end" min="0" max="59" value="59" onchange="onInputTypeChange('minute', 'range')"> 分钟</label>
+            </div>
+            <div class="cron-option">
+                <input type="radio" name="minute" value="interval" onchange="updateCron()">
+                <label>循环：从 <input type="number" id="min-from" min="0" max="59" value="0" onchange="onInputTypeChange('minute', 'interval')"> 分钟开始，每 <input type="number" id="min-step" min="1" max="59" value="1" onchange="onInputTypeChange('minute', 'interval')"> 分钟执行一次</label>
+            </div>
+            <div class="cron-option">
+                <input type="radio" name="minute" value="specific" onchange="updateCron()">
+                <label>指定：</label>
+            </div>
+            <div class="cron-checkboxes" id="minute-checkboxes">
+                <!-- JS will populate this -->
+            </div>
+        </div>
+
+        <!-- 小时 -->
+        <div id="tab-hour" class="cron-content">
+            <div class="cron-option">
+                <input type="radio" name="hour" value="*" checked onchange="updateCron()">
+                <label>每小时</label>
+            </div>
+            <div class="cron-option">
+                <input type="radio" name="hour" value="range" onchange="updateCron()">
+                <label>周期：从 <input type="number" id="hour-start" min="0" max="23" value="0" onchange="onInputTypeChange('hour', 'range')"> 到 <input type="number" id="hour-end" min="0" max="23" value="23" onchange="onInputTypeChange('hour', 'range')"> 小时</label>
+            </div>
+            <div class="cron-option">
+                <input type="radio" name="hour" value="interval" onchange="updateCron()">
+                <label>循环：从 <input type="number" id="hour-from" min="0" max="23" value="0" onchange="onInputTypeChange('hour', 'interval')"> 小时开始，每 <input type="number" id="hour-step" min="1" max="23" value="1" onchange="onInputTypeChange('hour', 'interval')"> 小时执行一次</label>
+            </div>
+            <div class="cron-option">
+                <input type="radio" name="hour" value="specific" onchange="updateCron()">
+                <label>指定：</label>
+            </div>
+            <div class="cron-checkboxes" id="hour-checkboxes"></div>
+        </div>
+
+        <!-- 日期 -->
+        <div id="tab-day" class="cron-content">
+            <div class="cron-option">
+                <input type="radio" name="day" value="*" checked onchange="updateCron()">
+                <label>每日</label>
+            </div>
+            <div class="cron-option">
+                <input type="radio" name="day" value="?" onchange="updateCron()">
+                <label>不指定</label>
+            </div>
+            <div class="cron-option">
+                <input type="radio" name="day" value="range" onchange="updateCron()">
+                <label>周期：从 <input type="number" id="day-start" min="1" max="31" value="1" onchange="onInputTypeChange('day', 'range')"> 到 <input type="number" id="day-end" min="1" max="31" value="31" onchange="onInputTypeChange('day', 'range')"> 日</label>
+            </div>
+            <div class="cron-option">
+                <input type="radio" name="day" value="interval" onchange="updateCron()">
+                <label>循环：从 <input type="number" id="day-from" min="1" max="31" value="1" onchange="onInputTypeChange('day', 'interval')"> 日开始，每 <input type="number" id="day-step" min="1" max="31" value="1" onchange="onInputTypeChange('day', 'interval')"> 日执行一次</label>
+            </div>
+            <div class="cron-option">
+                <input type="radio" name="day" value="specific" onchange="updateCron()">
+                <label>指定：</label>
+            </div>
+            <div class="cron-checkboxes" id="day-checkboxes"></div>
+        </div>
+
+        <!-- 月份 -->
+        <div id="tab-month" class="cron-content">
+            <div class="cron-option">
+                <input type="radio" name="month" value="*" checked onchange="updateCron()">
+                <label>每月</label>
+            </div>
+            <div class="cron-option">
+                <input type="radio" name="month" value="range" onchange="updateCron()">
+                <label>周期：从 <input type="number" id="month-start" min="1" max="12" value="1" onchange="onInputTypeChange('month', 'range')"> 到 <input type="number" id="month-end" min="1" max="12" value="12" onchange="onInputTypeChange('month', 'range')"> 月</label>
+            </div>
+            <div class="cron-option">
+                <input type="radio" name="month" value="interval" onchange="updateCron()">
+                <label>循环：从 <input type="number" id="month-from" min="1" max="12" value="1" onchange="onInputTypeChange('month', 'interval')"> 月开始，每 <input type="number" id="month-step" min="1" max="12" value="1" onchange="onInputTypeChange('month', 'interval')"> 月执行一次</label>
+            </div>
+            <div class="cron-option">
+                <input type="radio" name="month" value="specific" onchange="updateCron()">
+                <label>指定：</label>
+            </div>
+            <div class="cron-checkboxes" id="month-checkboxes"></div>
+        </div>
+
+        <!-- 星期 -->
+        <div id="tab-week" class="cron-content">
+            <div class="cron-option">
+                <input type="radio" name="week" value="*" onchange="updateCron()">
+                <label>每周</label>
+            </div>
+            <div class="cron-option">
+                <input type="radio" name="week" value="?" checked onchange="updateCron()">
+                <label>不指定</label>
+            </div>
+            <div class="cron-option">
+                <input type="radio" name="week" value="range" onchange="updateCron()">
+                <label>周期：从星期 <input type="number" id="week-start" min="1" max="7" value="1" onchange="onInputTypeChange('week', 'range')"> 到星期 <input type="number" id="week-end" min="1" max="7" value="7" onchange="onInputTypeChange('week', 'range')"></label>
+            </div>
+            <div class="cron-option">
+                <input type="radio" name="week" value="specific" onchange="updateCron()">
+                <label>指定：</label>
+            </div>
+            <div class="cron-checkboxes" id="week-checkboxes"></div>
+        </div>
+    </div>
+
+    <div class="next-runs">
+        <h3>最近5次运行时间（基于当前时间）：</h3>
+        <ul id="next-runs-list">
+            <li>计算中...</li>
+        </ul>
+    </div>
+</div>
+
+<footer class="footer">
+    <div class="footer-content">
+        <div class="footer-info">
+            2025 JSON可视化工具 - 让JSON数据更易读
+        </div>
+        <div class="footer-links">
+            <a href="https://github.com/yequ/json-visualizer" class="footer-link" target="_blank">GitHub</a>
+        </div>
+    </div>
+</footer>
+
+<script src="../js/theme.js"></script>
+<script src="../js/cron.js"></script>
+<script src="../js/analytics.js"></script>
+</body>
+</html>
