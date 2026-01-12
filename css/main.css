@@ -244,10 +244,10 @@ button:active {
 
 /* 复制按钮 */
 .copy-output-btn {
-    position: absolute;
-    top: 0.75rem;
-    right: 0.75rem;
-    z-index: 10;
+    /* position: absolute; */ /* Removed absolute positioning */
+    /* top: 0.75rem; */
+    /* right: 0.75rem; */
+    /* z-index: 10; */
     display: inline-flex;
     align-items: center;
     gap: 0.375rem;
