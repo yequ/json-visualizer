@@ -228,7 +228,7 @@ button:active {
 /* 编辑器区域 */
 .boxes {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     gap: 1.5rem;
     min-height: 650px;
 }
@@ -985,7 +985,7 @@ pre {
 /* 压缩工具特定布局 */
 .io-container {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     gap: 1.5rem;
     min-height: 500px;
 }
