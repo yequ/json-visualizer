@@ -57,14 +57,19 @@ jobs:
           echo
 
       - name: Submit to Baidu (active push, requires BAIDU_TOKEN secret)
-        if: ${{ secrets.BAIDU_TOKEN != '' }}
+        env:
+          BAIDU_TOKEN: ${{ secrets.BAIDU_TOKEN }}
         run: |
+          if [ -z "$BAIDU_TOKEN" ]; then
+            echo "BAIDU_TOKEN secret not configured, skipping Baidu submission"
+            exit 0
+          fi
           python3 - <<'EOF'
           import json
           urls = json.load(open('urls.json'))
           open('baidu-urls.txt', 'w').write('\n'.join(urls))
           print(f'{len(urls)} URLs prepared for Baidu')
           EOF
-          curl -s -X POST "https://data.zz.baidu.com/urls?site=https://json.red&token=${{ secrets.BAIDU_TOKEN }}" \
+          curl -s -X POST "https://data.zz.baidu.com/urls?site=https://json.red&token=$BAIDU_TOKEN" \
             -H "Content-Type: text/plain" --data-binary @baidu-urls.txt
           echo
