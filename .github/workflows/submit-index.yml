@@ -70,6 +70,7 @@ jobs:
           open('baidu-urls.txt', 'w').write('\n'.join(urls))
           print(f'{len(urls)} URLs prepared for Baidu')
           EOF
-          curl -s -X POST "https://data.zz.baidu.com/urls?site=https://json.red&token=$BAIDU_TOKEN" \
+          # 百度官方推送接口为 http（https 证书校验会失败）
+          curl -s -X POST "http://data.zz.baidu.com/urls?site=https://json.red&token=$BAIDU_TOKEN" \
             -H "Content-Type: text/plain" --data-binary @baidu-urls.txt
           echo
