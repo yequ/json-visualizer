@@ -1,0 +1,70 @@
+name: Submit to Search Engines
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    # 每天 11:17 北京时间（避开整点）
+    - cron: '17 3 * * *'
+  workflow_dispatch:
+
+jobs:
+  submit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Extract URLs from sitemap.xml
+        run: |
+          python3 - <<'EOF'
+          import json
+          import xml.etree.ElementTree as ET
+          NS = '{http://www.sitemaps.org/schemas/sitemap/0.9}'
+          tree = ET.parse('sitemap.xml')
+          urls = [u.text.strip() for u in tree.iter(f'{NS}loc') if u.text]
+          json.dump(urls, open('urls.json', 'w'))
+          print(f'{len(urls)} URLs extracted')
+          EOF
+
+      - name: Submit to IndexNow (Bing & others)
+        env:
+          INDEXNOW_KEY: 2c11830f900956cc
+        run: |
+          # 等待 GitHub Pages 发布 key 文件（首次 push 时 Pages 可能尚未构建完成）
+          for i in $(seq 1 30); do
+            if curl -sf "https://json.red/$INDEXNOW_KEY.txt" | grep -q "$INDEXNOW_KEY"; then
+              echo "IndexNow key file is live"
+              break
+            fi
+            echo "Waiting for key file to go live ($i/30)..."
+            sleep 10
+          done
+          python3 - <<'EOF'
+          import json, os
+          urls = json.load(open('urls.json'))
+          payload = {
+              'host': 'json.red',
+              'key': os.environ['INDEXNOW_KEY'],
+              'keyLocation': f"https://json.red/{os.environ['INDEXNOW_KEY']}.txt",
+              'urlList': urls,
+          }
+          json.dump(payload, open('indexnow-payload.json', 'w'))
+          print('Payload ready')
+          EOF
+          curl -s -X POST "https://api.indexnow.org/indexnow" \
+            -H "Content-Type: application/json; charset=utf-8" \
+            --data-binary @indexnow-payload.json
+          echo
+
+      - name: Submit to Baidu (active push, requires BAIDU_TOKEN secret)
+        if: ${{ secrets.BAIDU_TOKEN != '' }}
+        run: |
+          python3 - <<'EOF'
+          import json
+          urls = json.load(open('urls.json'))
+          open('baidu-urls.txt', 'w').write('\n'.join(urls))
+          print(f'{len(urls)} URLs prepared for Baidu')
+          EOF
+          curl -s -X POST "https://data.zz.baidu.com/urls?site=https://json.red&token=${{ secrets.BAIDU_TOKEN }}" \
+            -H "Content-Type: text/plain" --data-binary @baidu-urls.txt
+          echo
